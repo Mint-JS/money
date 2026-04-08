@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예금 vs 적금 진짜 이자 비교기 (현실 패치)</title>
+    <title>예금 vs 적금 진짜 이자 비교기 (발생이자 상세내역)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #2c3e50; --deposit: #2980b9; --savings: #8e44ad; --bg: #f8f9fa; --highlight: #e74c3c; }
         body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 40px 20px; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 650px; width: 100%; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 800px; width: 100%; }
         h2 { color: var(--primary); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .full { grid-column: span 2; }
@@ -26,6 +26,20 @@
         .money { font-size: 1.3em; font-weight: bold; }
         .tax-info { font-size: 0.8em; color: #7f8c8d; text-align: right; margin-top: -10px; margin-bottom: 15px; }
         #winnerMsg { margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.1em; }
+        
+        /* 🔥 넓어진 표 스타일 */
+        .table-wrapper { margin-top: 30px; overflow-x: auto; }
+        .styled-table { width: 100%; border-collapse: collapse; font-size: 0.8em; text-align: right; white-space: nowrap; }
+        .styled-table th, .styled-table td { padding: 10px 8px; border-bottom: 1px solid #ddd; }
+        .styled-table th { background-color: var(--primary); color: white; text-align: center; position: sticky; top: 0; }
+        .styled-table tbody tr:nth-of-type(even) { background-color: #f9f9f9; }
+        .styled-table tbody tr:hover { background-color: #f1f1f1; }
+        .dep-col { background-color: rgba(41, 128, 185, 0.03); }
+        .sav-col { background-color: rgba(142, 68, 173, 0.03); }
+        .th-dep { background-color: var(--deposit) !important; }
+        .th-sav { background-color: var(--savings) !important; }
+        .month-col { text-align: center; font-weight: bold; background: #eee; }
+        .monthly-yield { color: #555; }
     </style>
 </head>
 <body>
@@ -53,7 +67,7 @@
         </div>
     </div>
 
-    <button id="calcBtn">진짜 승자 확인하기</button>
+    <button id="calcBtn">진짜 승자 및 상세 내역 확인하기</button>
 
     <div id="result">
         <p class="tax-info">※ 세금(15.4%)을 떼고 내 통장에 들어오는 '진짜 이자' 기준</p>
@@ -79,6 +93,29 @@
         <div class="chart-container">
             <canvas id="compareChart"></canvas>
         </div>
+
+        <div class="table-wrapper">
+            <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">📅 매월 통장에 쌓이는 내역 (세후)</h3>
+            <table class="styled-table" id="detailTable">
+                <thead>
+                    <tr>
+                        <th rowspan="2" style="background:#7f8c8d;">월차</th>
+                        <th colspan="3" class="th-dep">정기 예금</th>
+                        <th colspan="3" class="th-sav">정기 적금</th>
+                    </tr>
+                    <tr>
+                        <th class="th-dep" style="font-size:0.85em;">쌓인 원금</th>
+                        <th class="th-dep" style="font-size:0.85em;">이번달 발생이자</th>
+                        <th class="th-dep" style="font-size:0.85em;">누적 이자</th>
+                        <th class="th-sav" style="font-size:0.85em;">쌓인 원금</th>
+                        <th class="th-sav" style="font-size:0.85em;">이번달 발생이자</th>
+                        <th class="th-sav" style="font-size:0.85em;">누적 이자</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -95,22 +132,19 @@
         const depRate = parseFloat(document.getElementById('depRate').value) / 100;
         const savRate = parseFloat(document.getElementById('savRate').value) / 100;
 
-        // 월 납입액 계산
         const monthly = principal / months;
+        const taxMultiplier = 0.846; // 15.4% 세금 공제 후
 
-        // 이자 계산 (세후)
-        const depInterestPostTax = principal * depRate * (months / 12) * 0.846;
-        const savInterestPostTax = monthly * savRate * (months * (months + 1) / 2) / 12 * 0.846;
+        // 최종 이자 계산
+        const depInterestPostTax = principal * depRate * (months / 12) * taxMultiplier;
+        const savInterestPostTax = monthly * savRate * (months * (months + 1) / 2) / 12 * taxMultiplier;
 
-        // 화면 출력
         document.getElementById('result').style.display = 'block';
         document.getElementById('depDesc').innerText = `처음에 ${formatMoney(principal)} 한 번에 넣기`;
         document.getElementById('savDesc').innerText = `매월 ${formatMoney(monthly)}씩 쪼개서 넣기`;
-        
         document.getElementById('depInterest').innerText = formatMoney(depInterestPostTax);
         document.getElementById('savInterest').innerText = formatMoney(savInterestPostTax);
 
-        // 승자 메시지
         const msgBox = document.getElementById('winnerMsg');
         if (depInterestPostTax > savInterestPostTax) {
             msgBox.innerHTML = `💡 금리는 적금이 <b>${(savRate*100 - depRate*100).toFixed(1)}%p</b> 더 높지만,<br>실제 돈은 <b>예금</b>이 더 많이 들어옵니다!`;
@@ -126,7 +160,40 @@
             msgBox.style.color = "#333";
         }
 
-        // 차트 그리기
+        // 🔥 매월 상세 내역 표 생성 로직 (발생이자 추가)
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = ''; 
+
+        let currentDepInterest = 0;
+        let currentSavInterest = 0;
+        
+        // 예금: 매달 똑같은 금액의 이자가 발생함
+        const thisMonthDepInterest = (principal * depRate / 12) * taxMultiplier;
+
+        for (let i = 1; i <= months; i++) {
+            // 예금
+            currentDepInterest += thisMonthDepInterest;
+            
+            // 적금: 그 달까지 모인 원금에 비례해서 이번 달 이자가 다르게 발생함
+            const currentSavPrincipal = monthly * i;
+            const thisMonthSavInterest = (currentSavPrincipal * savRate / 12) * taxMultiplier;
+            currentSavInterest += thisMonthSavInterest;
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="month-col">${i}개월</td>
+                
+                <td class="dep-col">${formatMoney(principal)}</td>
+                <td class="dep-col monthly-yield">+${formatMoney(thisMonthDepInterest)}</td>
+                <td class="dep-col" style="color:var(--deposit); font-weight:bold;">${formatMoney(currentDepInterest)}</td>
+                
+                <td class="sav-col">${formatMoney(currentSavPrincipal)}</td>
+                <td class="sav-col monthly-yield">+${formatMoney(thisMonthSavInterest)}</td>
+                <td class="sav-col" style="color:var(--savings); font-weight:bold;">${formatMoney(currentSavInterest)}</td>
+            `;
+            tbody.appendChild(tr);
+        }
+
         const ctx = document.getElementById('compareChart').getContext('2d');
         if (compareChart) compareChart.destroy();
 
