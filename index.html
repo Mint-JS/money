@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>나의 생애 자산 설계 시뮬레이터 (물가상승률 반영)</title>
+    <title>나의 생애 자산 설계 시뮬레이터 (반전 버전)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #2c3e50; --secondary: #27ae60; --accent: #e74c3c; --bg: #f8f9fa; --warning: #f39c12; }
@@ -16,8 +16,21 @@
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
         input[type="number"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1em; background: #fff; }
         input[readonly] { background: #f1f3f5; color: var(--secondary); font-weight: bold; border: 1px dashed var(--secondary); }
-        .checkbox-group { display: flex; align-items: center; background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 5px solid #ffc107; cursor: pointer; }
-        .checkbox-group input { width: 20px; height: 20px; margin-right: 10px; cursor: pointer; }
+        
+        /* 🔥 숨겨진 버튼 스타일 (아주 작고 눈에 띄지 않게) */
+        .hidden-config {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 0.7em;
+            color: #ccc;
+            opacity: 0.3;
+            cursor: pointer;
+            transition: opacity 0.3s;
+        }
+        .hidden-config:hover { opacity: 1; color: #aaa; }
+        .hidden-config input { width: 12px; height: 12px; margin-right: 3px; cursor: pointer; }
+
         button { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
         button:hover { background: #219150; }
         #result { margin-top: 30px; padding: 20px; background: #f0fff4; border-radius: 10px; display: none; line-height: 1.8; border-left: 6px solid var(--secondary); }
@@ -26,14 +39,15 @@
         .box { background: #fff; padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px solid #ddd; }
         .chart-container { position: relative; height: 300px; width: 100%; margin-top: 20px; }
         .info { font-size: 0.8em; color: #888; margin-top: 4px; }
+        
+        /* 🔥 물가 상승률 결과창 스타일 */
         #inflationResult { margin-top: 20px; padding: 15px; background: #fff8e1; border-radius: 10px; display: none; border-left: 6px solid var(--warning); line-height: 1.6; }
         #inflationResult h4 { margin: 0 0 10px 0; color: #d35400; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h2>📊 생애 자산 설계 시뮬레이터</h2>
+<div class="card" style="position: relative;"> <h2>📊 생애 자산 설계 시뮬레이터</h2>
     
     <div class="grid">
         <div class="input-group">
@@ -68,12 +82,13 @@
             <label style="color:#2c3e50;">💡 은퇴 후 자산의 연평균 수익률 (%)</label>
             <input type="number" id="retireReturnRate" value="3" step="0.1" style="border:1px solid #bdc3c7;">
         </div>
-        <div class="input-group full">
-            <label class="checkbox-group">
-                <input type="checkbox" id="applyInflation" checked> 
-                <span>📈 <strong>현실 패치:</strong> 물가 상승률(연 평균 2.5%) 반영하여 계산하기</span>
-            </label>
-        </div>
+    </div>
+
+    <div class="hidden-config">
+        <label>
+            <input type="checkbox" id="applyInflation">
+            <span>현실 패치 (?)</span>
+        </label>
     </div>
 
     <button id="calcBtn">내 미래 자산 분석하기</button>
@@ -161,7 +176,7 @@
         const startAge = parseInt(document.getElementById('startAge').value);
         const retireAge = parseInt(document.getElementById('retireAge').value);
         const lifeAge = parseInt(document.getElementById('lifeAge').value);
-        const expense = parseInt(document.getElementById('expense').value); // 현재 가치 기준 지출
+        const expense = parseInt(document.getElementById('expense').value); 
         const savings = parseInt(document.getElementById('autoSavings').value);
         const workReturnRate = parseFloat(document.getElementById('workReturnRate').value);
         const retireReturnRate = parseFloat(document.getElementById('retireReturnRate').value);
@@ -197,22 +212,18 @@
         document.getElementById('totalWealth').innerHTML = formatMoney(totalSaved);
         
         let oldAgeText = `✔️ 은퇴 후 매달 쓸 수 있는 돈 (수익률 ${retireReturnRate}% 적용): <span class="accent">${formatMoney(monthlyBudget)}</span>`;
-        if(retireReturnRate === 0) {
-            oldAgeText = `✔️ 은퇴 후 매달 쓸 수 있는 돈 (수익률 0% 단순 나눗셈): <span class="accent">${formatMoney(monthlyBudget)}</span>`;
-        }
         document.getElementById('oldAgeMonthly').innerHTML = oldAgeText;
 
-        // 물가 상승률 미반영 시 기본 메시지
+        // 🔥 기본 메시지 (단순 계산 기반)
         let msg = (monthlyBudget < expense) 
             ? "⚠️ 단순 계산으로도 지출이 수입보다 많습니다. 은퇴 후 생활이 어려울 수 있어요!" 
             : "✅ 단순 계산으로는 은퇴 후에도 현재의 생활 수준을 유지할 수 있어 보입니다.";
         document.getElementById('finalMsg').innerText = msg;
         document.getElementById('finalMsg').style.color = (monthlyBudget < expense) ? "#e74c3c" : "#27ae60";
 
-        // 물가 상승률 적용 시 추가 피드백 처리
+        // 🔥 물가 상승률 적용 시 (숨겨진 버튼 작동 시)
         const inflationBox = document.getElementById('inflationResult');
         if(applyInflation) {
-            // 미래의 월 생활비 계산: 현재 생활비 * (1 + 0.025)^일하는기간
             const futureExpense = expense * Math.pow(1 + INFLATION_RATE, workYears);
             const shortfall = futureExpense - monthlyBudget;
             
