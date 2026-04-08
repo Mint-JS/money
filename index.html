@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>나의 생애 자산 설계 시뮬레이터 (물가상승률 반영)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary: #2c3e50; --secondary: #27ae60; --accent: #e74c3c; --bg: #f8f9fa; --warning: #f39c12; }
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 700px; width: 100%; }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--secondary); padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .input-group { margin-bottom: 15px; }
+        .full { grid-column: span 2; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
+        input[type="number"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1em; background: #fff; }
+        input[readonly] { background: #f1f3f5; color: var(--secondary); font-weight: bold; border: 1px dashed var(--secondary); }
+        .checkbox-group { display: flex; align-items: center; background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 5px solid #ffc107; cursor: pointer; }
+        .checkbox-group input { width: 20px; height: 20px; margin-right: 10px; cursor: pointer; }
+        button { width: 100%; padding: 15px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        button:hover { background: #219150; }
+        #result { margin-top: 30px; padding: 20px; background: #f0fff4; border-radius: 10px; display: none; line-height: 1.8; border-left: 6px solid var(--secondary); }
+        .highlight { font-weight: bold; color: var(--primary); }
+        .accent { font-weight: bold; color: var(--accent); }
+        .box { background: #fff; padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px solid #ddd; }
+        .chart-container { position: relative; height: 300px; width: 100%; margin-top: 20px; }
+        .info { font-size: 0.8em; color: #888; margin-top: 4px; }
+        #inflationResult { margin-top: 20px; padding: 15px; background: #fff8e1; border-radius: 10px; display: none; border-left: 6px solid var(--warning); line-height: 1.6; }
+        #inflationResult h4 { margin: 0 0 10px 0; color: #d35400; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>📊 생애 자산 설계 시뮬레이터</h2>
+    
+    <div class="grid">
+        <div class="input-group">
+            <label>경제 활동 시작 나이 (세)</label>
+            <input type="number" id="startAge" value="28">
+        </div>
+        <div class="input-group">
+            <label>은퇴 예정 나이 (세)</label>
+            <input type="number" id="retireAge" value="60">
+        </div>
+        <div class="input-group">
+            <label>기대 수명 (세)</label>
+            <input type="number" id="lifeAge" value="100">
+        </div>
+        <div class="input-group">
+            <label>일할 때 평균 수익률 (%)</label>
+            <input type="number" id="workReturnRate" value="6" step="0.1">
+        </div>
+        <div class="input-group">
+            <label>희망 평균 월급 (만원)</label>
+            <input type="number" id="salary" value="400">
+        </div>
+        <div class="input-group">
+            <label>현재 기준 고정 지출액 (만원)</label>
+            <input type="number" id="expense" value="250">
+        </div>
+        <div class="input-group full">
+            <label>자동 계산된 월 저축액 (만원)</label>
+            <input type="number" id="autoSavings" readonly>
+        </div>
+        <div class="input-group full" style="background: #eef2f5; padding: 15px; border-radius: 8px;">
+            <label style="color:#2c3e50;">💡 은퇴 후 자산의 연평균 수익률 (%)</label>
+            <input type="number" id="retireReturnRate" value="3" step="0.1" style="border:1px solid #bdc3c7;">
+        </div>
+        <div class="input-group full">
+            <label class="checkbox-group">
+                <input type="checkbox" id="applyInflation" checked> 
+                <span>📈 <strong>현실 패치:</strong> 물가 상승률(연 평균 2.5%) 반영하여 계산하기</span>
+            </label>
+        </div>
+    </div>
+
+    <button id="calcBtn">내 미래 자산 분석하기</button>
+
+    <div id="result">
+        <h3>📍 분석 결과</h3>
+        <p id="workDuration"></p>
+        
+        <div class="chart-container">
+            <canvas id="assetChart"></canvas>
+        </div>
+
+        <div class="box">
+            <p>💸 <strong>순수하게 모은 원금:</strong> <span id="principalWealth"></span></p>
+            <p>🚀 <strong>복리 수익이 더해진 총 자산:</strong> <span id="totalWealth" class="accent"></span></p>
+        </div>
+
+        <p id="oldAgeMonthly"></p>
+        <p id="finalMsg" style="font-weight: bold; margin-top: 15px; text-align: center;"></p>
+        
+        <div id="inflationResult">
+            <h4>🚨 잠깐! 물가 상승의 함정</h4>
+            <p id="inflationText"></p>
+        </div>
+    </div>
+</div>
+
+<script>
+    let myChart = null;
+    const INFLATION_RATE = 0.025; // 연평균 물가 상승률 2.5% 고정
+
+    function updateSavings() {
+        const salary = parseInt(document.getElementById('salary').value) || 0;
+        const expense = parseInt(document.getElementById('expense').value) || 0;
+        const savings = salary - expense;
+        document.getElementById('autoSavings').value = savings > 0 ? savings : 0;
+    }
+
+    document.getElementById('salary').addEventListener('input', updateSavings);
+    document.getElementById('expense').addEventListener('input', updateSavings);
+    window.onload = updateSavings;
+
+    function formatMoney(amount) {
+        if (isNaN(amount) || amount <= 0) return "0원";
+        const eok = Math.floor(amount / 10000);
+        const man = Math.floor(amount % 10000);
+        if (eok > 0 && man > 0) return `${eok}억 ${man}만원`;
+        if (eok > 0 && man === 0) return `${eok}억원`;
+        return `${man}만원`;
+    }
+
+    function drawChart(startAge, retireAge, savings, workReturnRate) {
+        const ctx = document.getElementById('assetChart').getContext('2d');
+        const labels = [];
+        const principalData = [];
+        const compoundData = [];
+        const monthlyRate = (workReturnRate / 100) / 12;
+
+        for (let age = startAge; age <= retireAge; age++) {
+            labels.push(age + '세');
+            const months = (age - startAge) * 12;
+            principalData.push(savings * months);
+            
+            let compound = (monthlyRate > 0 && months > 0) 
+                ? savings * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate)
+                : savings * months;
+            compoundData.push(Math.floor(compound));
+        }
+
+        if (myChart) myChart.destroy();
+        myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: '납입 원금', data: principalData, borderColor: '#95a5a6', borderWidth: 2, fill: false, pointRadius: 0 },
+                    { label: '복리 적용 자산', data: compoundData, borderColor: '#e74c3c', borderWidth: 3, fill: true, backgroundColor: 'rgba(231, 76, 60, 0.1)', pointRadius: 0 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { callback: v => v >= 10000 ? Math.floor(v/10000) + '억' : v + '만' } } } }
+        });
+    }
+
+    function calculate() {
+        const startAge = parseInt(document.getElementById('startAge').value);
+        const retireAge = parseInt(document.getElementById('retireAge').value);
+        const lifeAge = parseInt(document.getElementById('lifeAge').value);
+        const expense = parseInt(document.getElementById('expense').value); // 현재 가치 기준 지출
+        const savings = parseInt(document.getElementById('autoSavings').value);
+        const workReturnRate = parseFloat(document.getElementById('workReturnRate').value);
+        const retireReturnRate = parseFloat(document.getElementById('retireReturnRate').value);
+        const applyInflation = document.getElementById('applyInflation').checked;
+
+        if(startAge >= retireAge || retireAge >= lifeAge) {
+            alert("나이 설정을 확인해주세요 (시작 < 은퇴 < 수명)");
+            return;
+        }
+
+        const workYears = retireAge - startAge;
+        const oldYears = lifeAge - retireAge;
+        const principal = savings * workYears * 12;
+        
+        const workMonthlyRate = (workReturnRate / 100) / 12;
+        const totalSaved = (workMonthlyRate > 0) 
+            ? savings * ((Math.pow(1 + workMonthlyRate, workYears * 12) - 1) / workMonthlyRate)
+            : principal;
+
+        const oldMonths = oldYears * 12;
+        const retireMonthlyRate = (retireReturnRate / 100) / 12;
+        
+        let monthlyBudget = 0;
+        if (retireMonthlyRate > 0) {
+            monthlyBudget = totalSaved * (retireMonthlyRate / (1 - Math.pow(1 + retireMonthlyRate, -oldMonths)));
+        } else {
+            monthlyBudget = totalSaved / oldMonths;
+        }
+
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('workDuration').innerHTML = `✔️ <span class="highlight">${workYears}년</span>간 벌어서, 은퇴 후 <span class="highlight">${oldYears}년</span>을 살아야 합니다.`;
+        document.getElementById('principalWealth').innerHTML = formatMoney(principal);
+        document.getElementById('totalWealth').innerHTML = formatMoney(totalSaved);
+        
+        let oldAgeText = `✔️ 은퇴 후 매달 쓸 수 있는 돈 (수익률 ${retireReturnRate}% 적용): <span class="accent">${formatMoney(monthlyBudget)}</span>`;
+        if(retireReturnRate === 0) {
+            oldAgeText = `✔️ 은퇴 후 매달 쓸 수 있는 돈 (수익률 0% 단순 나눗셈): <span class="accent">${formatMoney(monthlyBudget)}</span>`;
+        }
+        document.getElementById('oldAgeMonthly').innerHTML = oldAgeText;
+
+        // 물가 상승률 미반영 시 기본 메시지
+        let msg = (monthlyBudget < expense) 
+            ? "⚠️ 단순 계산으로도 지출이 수입보다 많습니다. 은퇴 후 생활이 어려울 수 있어요!" 
+            : "✅ 단순 계산으로는 은퇴 후에도 현재의 생활 수준을 유지할 수 있어 보입니다.";
+        document.getElementById('finalMsg').innerText = msg;
+        document.getElementById('finalMsg').style.color = (monthlyBudget < expense) ? "#e74c3c" : "#27ae60";
+
+        // 물가 상승률 적용 시 추가 피드백 처리
+        const inflationBox = document.getElementById('inflationResult');
+        if(applyInflation) {
+            // 미래의 월 생활비 계산: 현재 생활비 * (1 + 0.025)^일하는기간
+            const futureExpense = expense * Math.pow(1 + INFLATION_RATE, workYears);
+            const shortfall = futureExpense - monthlyBudget;
+            
+            let inflationHtml = `현재 ${formatMoney(expense)}인 월 생활비는 매년 물가가 2.5%씩 오른다고 가정할 때, <strong>${workYears}년 뒤 은퇴 시점에는 약 ${formatMoney(Math.floor(futureExpense))}</strong>이 필요해집니다.<br><br>`;
+            
+            if (shortfall > 0) {
+                inflationHtml += `😭 내가 모은 돈에서 나오는 월 ${formatMoney(monthlyBudget)}으로는 <strong>매월 ${formatMoney(Math.floor(shortfall))}이 부족</strong>합니다.<br>
+                결론: 물가 상승을 이기려면 <strong>지금 당장 불필요한 지출을 줄여 저축/투자액을 늘리거나, 더 높은 수익률(연 ${workReturnRate}% 초과)을 목표로 금융 공부</strong>를 해야 합니다!`;
+            } else {
+                inflationHtml += `😎 다행히 내가 모은 돈에서 나오는 월 ${formatMoney(monthlyBudget)}이 미래 생활비보다 넉넉합니다. 물가 상승을 멋지게 방어했네요!`;
+            }
+            
+            document.getElementById('inflationText').innerHTML = inflationHtml;
+            inflationBox.style.display = 'block';
+        } else {
+            inflationBox.style.display = 'none';
+        }
+
+        drawChart(startAge, retireAge, savings, workReturnRate);
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculate);
+</script>
+
+</body>
+</html>
