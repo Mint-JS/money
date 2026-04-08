@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>예금 vs 적금 이자 비교 시뮬레이터</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root { --primary: #2980b9; --deposit: #3498db; --savings: #9b59b6; --bg: #f4f6f7; }
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 40px 20px; }
+        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 600px; width: 100%; }
+        h2 { color: var(--primary); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1em; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        button:hover { background: #2471a3; }
+        #result { margin-top: 30px; display: none; }
+        .result-box { padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fff; border: 1px solid #eee; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .deposit-box { border-left: 5px solid var(--deposit); }
+        .savings-box { border-left: 5px solid var(--savings); }
+        .chart-container { position: relative; height: 250px; width: 100%; margin-top: 20px; }
+        .highlight { font-size: 1.2em; font-weight: bold; }
+        .tax-info { font-size: 0.8em; color: #7f8c8d; text-align: right; margin-top: -10px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>🏦 예금 vs 적금 진짜 이자 비교기</h2>
+    
+    <div class="input-group">
+        <label>매월 저축할 금액 (만원)</label>
+        <input type="number" id="monthly" value="100">
+    </div>
+
+    <div class="input-group">
+        <label>가입 기간 (개월)</label>
+        <input type="number" id="months" value="12">
+    </div>
+
+    <div class="input-group">
+        <label>은행 안내 연 이자율 (%)</label>
+        <input type="number" id="rate" value="5" step="0.1">
+    </div>
+
+    <button id="calcBtn">실제 이자 계산하기</button>
+
+    <div id="result">
+        <p class="tax-info">※ 이자소득세 15.4%를 뺀 실제 수령액 기준</p>
+        
+        <div class="result-box deposit-box">
+            <h3>🔹 정기 예금 (한 번에 목돈 넣기)</h3>
+            <p>시작할 때 <strong><span id="depPrincipal"></span></strong>을 한 번에 넣었다면?</p>
+            <p>순수 이자 수령액: <span id="depInterest" class="highlight" style="color: var(--deposit)"></span></p>
+        </div>
+
+        <div class="result-box savings-box">
+            <h3>🔸 정기 적금 (매월 쪼개서 넣기)</h3>
+            <p>매월 <strong><span id="savMonthly"></span></strong>씩 쪼개서 넣었다면?</p>
+            <p>순수 이자 수령액: <span id="savInterest" class="highlight" style="color: var(--savings)"></span></p>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="compareChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+    let compareChart = null;
+
+    function formatMoney(amount) {
+        if (amount < 10000) return Math.floor(amount).toLocaleString() + "원";
+        const man = Math.floor(amount / 10000);
+        const won = Math.floor(amount % 10000);
+        if (won > 0) return `${man.toLocaleString()}만 ${won.toLocaleString()}원`;
+        return `${man.toLocaleString()}만원`;
+    }
+
+    function calculateBank() {
+        const monthly = parseFloat(document.getElementById('monthly').value) * 10000;
+        const months = parseInt(document.getElementById('months').value);
+        const rate = parseFloat(document.getElementById('rate').value) / 100;
+
+        // 원금 계산
+        const principal = monthly * months;
+
+        // 정기예금 이자 (단리: 원금 * 연이율 * (개월수/12))
+        const depInterestPreTax = principal * rate * (months / 12);
+        const depInterestPostTax = depInterestPreTax * (1 - 0.154);
+
+        // 정기적금 이자 (단리: 월납입금 * 연이율 * (개월수*(개월수+1)/2) / 12)
+        const savInterestPreTax = monthly * rate * (months * (months + 1) / 2) / 12;
+        const savInterestPostTax = savInterestPreTax * (1 - 0.154);
+
+        // 화면 출력
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('depPrincipal').innerText = formatMoney(principal);
+        document.getElementById('savMonthly').innerText = formatMoney(monthly);
+        
+        document.getElementById('depInterest').innerText = formatMoney(depInterestPostTax);
+        document.getElementById('savInterest').innerText = formatMoney(savInterestPostTax);
+
+        // 차트 그리기
+        const ctx = document.getElementById('compareChart').getContext('2d');
+        if (compareChart) compareChart.destroy();
+
+        compareChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['정기 예금 이자', '정기 적금 이자'],
+                datasets: [{
+                    label: '실제 수령 이자 (원)',
+                    data: [Math.floor(depInterestPostTax), Math.floor(savInterestPostTax)],
+                    backgroundColor: ['#3498db', '#9b59b6'],
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { callback: v => v.toLocaleString() + '원' } }
+                }
+            }
+        });
+    }
+
+    document.getElementById('calcBtn').addEventListener('click', calculateBank);
+</script>
+
+</body>
+</html>
