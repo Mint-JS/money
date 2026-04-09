@@ -42,7 +42,6 @@
         button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         button:hover { background: #1a252f; }
         
-        /* 🔥 한눈에 보는 인생 재무제표 대시보드 스타일 */
         #summaryDashboard { background: #fff; border: 2px solid #2c3e50; border-radius: 12px; padding: 25px; margin-top: 25px; display: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         #summaryDashboard h3 { text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 20px; border-bottom: 1px dashed #ccc; padding-bottom: 15px; }
         .summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
@@ -50,8 +49,13 @@
         .sum-label { display: block; font-size: 0.85em; color: #7f8c8d; margin-bottom: 5px; font-weight: bold; }
         .sum-value { display: block; font-size: 1.2em; font-weight: bold; color: var(--primary); }
         .sum-row { grid-column: span 3; text-align: center; font-size: 1.1em; font-weight: bold; margin-bottom: 5px; background: #eaeded; padding: 12px; border-radius: 8px; }
-        .sum-row.highlight { background: #eafaf1; border: 2px solid #2ecc71; margin-top: 5px; }
-        .sum-row.danger { background: #1a1a1a; border: 2px solid #e74c3c; color: #fff; margin-top: 5px; }
+        .sum-row.highlight { background: #eafaf1; border: 2px solid #2ecc71; margin-top: 5px; padding: 15px; }
+        
+        /* 🔥 파산 상태를 강조하는 스타일 */
+        .sum-row.danger { background: #1a1a1a; border: 2px solid #e74c3c; color: #fff; margin-top: 5px; padding: 20px; }
+        .shortfall-box { background: rgba(231, 76, 60, 0.2); border: 1px dashed #e74c3c; padding: 15px; border-radius: 8px; margin-top: 15px; }
+        .shortfall-label { font-size: 0.9em; color: #ffcccc; display: block; margin-bottom: 5px; }
+        .shortfall-value { font-size: 1.6em; color: #ffeb3b; font-weight: bold; display: block; }
 
         .chart-container { position: relative; height: 350px; width: 100%; margin-top: 30px; }
         #hoverDataBox { background: #fff; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: center; font-size: 1.1em; border: 2px solid #bdc3c7; display: none; }
@@ -165,31 +169,36 @@
             <div class="sum-row" id="sumYears" style="color: #34495e;"></div>
             
             <div class="sum-box">
-                <span class="sum-label">평생 총 수입 (노동) 💼</span>
+                <span class="sum-label">살아있는 동안 번 돈 💼</span>
                 <span class="sum-value" id="sumIncome">0원</span>
             </div>
             <div class="sum-box">
-                <span class="sum-label">평생 투자 원금 🏦</span>
+                <span class="sum-label">살아있는 동안 저축한 원금 🏦</span>
                 <span class="sum-value" id="sumPrincipal">0원</span>
             </div>
             <div class="sum-box">
-                <span class="sum-label">평생 투자 이자 (수익) 🚀</span>
+                <span class="sum-label">살아있는 동안 얻은 투자 이자 🚀</span>
                 <span class="sum-value" id="sumInterest" style="color: #8e44ad;">0원</span>
             </div>
 
             <div class="sum-row highlight" id="successBox" style="display:none;">
-                <span class="sum-label" style="color: #27ae60;">✨ 평생 확보한 총 자산 (원금 + 이자)</span>
-                <span class="sum-value" id="sumTotalResources" style="font-size: 1.5em; color: #27ae60;">0원</span>
-            </div>
-
-            <div class="sum-row danger" id="failBox" style="display:none; grid-column: span 3;">
-                <span class="sum-label" style="color: #e74c3c;">💀 자본주의 생존 실패 (파산) 💀</span>
-                <span class="sum-value" style="font-size: 1.1em; color: #fff;">보유 자금이 0원이 되어 시뮬레이션이 종료되었습니다.</span>
+                <span class="sum-label" style="color: #27ae60;">✨ 내 인생의 총 자금 (평생 수입 + 투자 수익)</span>
+                <span class="sum-value" id="sumTotalResources" style="font-size: 1.6em; color: #27ae60;">0원</span>
             </div>
 
             <div class="sum-row" style="background: #fdedec; grid-column: span 3; border: 1px solid #fab1a0;">
                 <span class="sum-label" style="color: #c0392b;">🔥 살아있는 동안 쓴 생활비 총합</span>
                 <span class="sum-value" id="sumExpense" style="color: #c0392b;">0원</span>
+            </div>
+
+            <div class="sum-row danger" id="failBox" style="display:none; grid-column: span 3;">
+                <span class="sum-label" style="color: #e74c3c; font-size: 1.2em;">💀 자본주의 생존 실패 (파산) 💀</span>
+                <span class="sum-value" style="font-size: 1.1em; color: #fff;">보유 자금이 0원이 되어 시뮬레이션이 종료되었습니다.</span>
+                
+                <div class="shortfall-box">
+                    <span class="shortfall-label">목표 기대 수명(<span id="targetAgeTxt">100</span>세)까지 생존하기 위해 더 필요했던 금액</span>
+                    <span class="shortfall-value" id="sumShortfall">0원</span>
+                </div>
             </div>
         </div>
     </div>
@@ -262,14 +271,14 @@
         let currentWealth = 0, currentPrincipal = 0, bankruptAge = null;
         let isDead = false;
 
-        let lifetimeIncome = 0;
-        let lifetimeExpense = 0;
-        let lifetimeInvestedPrincipal = 0; // 🔥 평생 저축한 원금 총합
-        let lifetimeInterestGained = 0;    // 🔥 평생 얻은 이자 총합
+        let lifetimeIncomeAlive = 0;
+        let lifetimeExpenseAlive = 0;
+        let lifetimeInvestedPrincipal = 0; 
+        let lifetimeInterestGained = 0;    
+        let shortfallAmount = 0; // 🔥 목표 나이까지 더 필요했던 금액
 
         for (let age = aY; age <= aD; age++) {
             labels.push(age + '세');
-            if (isDead) { wealthData.push(null); principalData.push(null); continue; }
 
             let baseInc = (age < aM) ? incY : (age < aO) ? incM : incO;
             let baseExp = (age < aM) ? expY : (age < aO) ? expM : expO;
@@ -279,33 +288,53 @@
             let currentInc = (applyInflation && age < aO) ? baseInc * Math.pow(1 + SALARY_RATE, yearsPassed) : baseInc;
             let currentExp = applyInflation ? baseExp * Math.pow(1 + INFLATION_RATE, yearsPassed) : baseExp;
             
-            lifetimeIncome += (currentInc * 12);
-            lifetimeExpense += (currentExp * 12);
-            
-            let mSave = currentInc - currentExp;
+            // 살아있을 때 정상적으로 자산이 굴러가는 로직
+            if (!isDead) {
+                lifetimeIncomeAlive += (currentInc * 12);
+                lifetimeExpenseAlive += (currentExp * 12);
+                
+                let mSave = currentInc - currentExp;
 
-            for(let m=1; m<=12; m++) {
-                let monthlyInterest = currentWealth * mRate;
-                lifetimeInterestGained += monthlyInterest;
+                for(let m=1; m<=12; m++) {
+                    let monthlyInterest = currentWealth * mRate;
+                    lifetimeInterestGained += monthlyInterest;
+                    
+                    currentWealth = currentWealth + monthlyInterest + mSave;
+                    
+                    if (mSave > 0) lifetimeInvestedPrincipal += mSave;
+                    currentPrincipal += mSave;
+                }
                 
-                currentWealth = currentWealth + monthlyInterest + mSave;
+                wealthData.push(Math.floor(currentWealth));
+                principalData.push(Math.floor(currentPrincipal));
+
+                // 파산 판정
+                if (currentWealth < 0) { 
+                    bankruptAge = age; 
+                    isDead = true; 
+                    shortfallAmount += Math.abs(currentWealth); // 파산 시점에 발생한 즉각적인 마이너스 빚 추가
+                }
+            } else {
+                // 🔥 사망(파산) 후: 차트는 끊어버리고, 매년 필요했던 숨만 쉬어도 나가는 적자 금액을 계산
+                wealthData.push(null); 
+                principalData.push(null); 
                 
-                // 원금 누적은 실제 통장에서 빠져나간 '저축액'만 더합니다.
-                if (mSave > 0) lifetimeInvestedPrincipal += mSave;
-                currentPrincipal += mSave;
+                let yearlyDeficit = (currentExp * 12) - (currentInc * 12);
+                if (yearlyDeficit > 0) {
+                    shortfallAmount += yearlyDeficit;
+                }
             }
-            
-            wealthData.push(Math.floor(currentWealth));
-            principalData.push(Math.floor(currentPrincipal));
-            if (currentWealth < 0) { bankruptAge = age; isDead = true; }
         }
 
+        const totalResources = lifetimeIncomeAlive + lifetimeInterestGained;
+
         // 대시보드 업데이트
-        document.getElementById('sumIncome').innerText = formatMoney(lifetimeIncome);
+        document.getElementById('sumIncome').innerText = formatMoney(lifetimeIncomeAlive);
         document.getElementById('sumPrincipal').innerText = formatMoney(lifetimeInvestedPrincipal);
         document.getElementById('sumInterest').innerText = formatMoney(lifetimeInterestGained);
-        document.getElementById('sumTotalResources').innerText = formatMoney(lifetimeInvestedPrincipal + lifetimeInterestGained);
-        document.getElementById('sumExpense').innerText = formatMoney(lifetimeExpense);
+        document.getElementById('sumTotalResources').innerText = formatMoney(totalResources);
+        document.getElementById('sumExpense').innerText = formatMoney(lifetimeExpenseAlive);
+        document.getElementById('targetAgeTxt').innerText = aD;
         
         document.getElementById('summaryDashboard').style.display = 'block';
 
@@ -322,9 +351,12 @@
             document.getElementById('sumYears').innerHTML = `⏳ 목표 기대수명 <strong>${aD}세</strong> → 🚨 <strong>${bankruptAge}세</strong> 생존 종료`;
             document.getElementById('sumYears').style.color = '#e74c3c';
             document.getElementById('successBox').style.display = 'none';
+            
+            document.getElementById('sumShortfall').innerText = formatMoney(shortfallAmount);
             document.getElementById('failBox').style.display = 'block';
+            
             msgBox.className = 'bankrupt';
-            msgBox.innerHTML = `💀 <strong>${bankruptAge}세</strong>에 보유 자금이 바닥나 생존에 실패했습니다.`;
+            msgBox.innerHTML = `💀 <strong>${bankruptAge}세</strong>에 보유 자금이 바닥나 생존에 실패했습니다.<br>이대로 ${aD}세까지 살려면 <strong>${formatMoney(shortfallAmount)}</strong>이 더 필요했습니다.`;
         } else {
             const workYears = aO - aY;
             const retireYears = aD - aO + 1;
@@ -334,7 +366,7 @@
             document.getElementById('failBox').style.display = 'none';
             msgBox.className = 'success';
             const finalWealth = wealthData.findLast(val => val !== null);
-            msgBox.innerHTML = `🎉 <strong>${aD}세</strong>까지 생존하고 <strong>${formatMoney(finalWealth)}</strong>이 남았습니다!`;
+            msgBox.innerHTML = `🎉 <strong>${aD}세</strong>까지 생존하고 <strong>${formatMoney(finalWealth)}</strong>이 남습니다!`;
         }
 
         const ctx = document.getElementById('lifeChart').getContext('2d');
