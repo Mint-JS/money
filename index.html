@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Money Hub — Mint-JS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            overflow-x: hidden;
+        }
+
+        /* ─── 배경 장식 ─── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.08) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 80%, rgba(245, 158, 11, 0.06) 0%, transparent 50%);
+            animation: bgFloat 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, -1%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
+        }
+
+        /* ─── 헤더 ─── */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a78bfa, #60a5fa, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        .header .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 14px;
+            padding: 8px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+        }
+
+        .header .github-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .github-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* ─── 카드 그리드 ─── */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 960px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── 카드 ─── */
+        .card {
+            --accent: #6366f1;
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 36px 28px 28px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 0%, var(--accent), transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 0;
+        }
+
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--accent);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3),
+                        0 0 40px color-mix(in srgb, var(--accent) 15%, transparent);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card:hover::after {
+            opacity: 0.06;
+        }
+
+        .card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-icon {
+            font-size: 44px;
+            margin-bottom: 18px;
+            display: inline-block;
+            transition: transform 0.4s;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.15) rotate(-5deg);
+        }
+
+        .card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.6;
+            flex-grow: 1;
+            margin-bottom: 18px;
+        }
+
+        .card-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-tag {
+            display: inline-block;
+            padding: 5px 14px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: color-mix(in srgb, var(--accent) 15%, transparent);
+            color: color-mix(in srgb, var(--accent) 80%, white);
+            border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        .card-arrow {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
+        }
+
+        .card:hover .card-arrow {
+            background: var(--accent);
+            color: #fff;
+            transform: translateX(4px);
+        }
+
+        /* ─── 푸터 ─── */
+        .footer {
+            margin-top: 60px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ─── 반응형 ─── */
+        @media (max-width: 640px) {
+            .header h1 { font-size: 1.8rem; }
+            .grid { grid-template-columns: 1fr; gap: 16px; }
+            .card { padding: 28px 22px 22px; }
+            body { padding: 30px 16px; }
+        }
+
+        @media (min-width: 641px) and (max-width: 960px) {
+            .grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── 헤더 ─── -->
+    <header class="header">
+        <span class="header-icon">💰</span>
+        <h1>Money Hub</h1>
+        <p>금융 계산기 & 시뮬레이터 모음</p>
+        <a class="github-link" href="https://github.com/mint-js/money" target="_blank">
+            <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            GitHub Repository
+        </a>
+    </header>
+
+    <!-- ─── 카드 그리드 ─── -->
+    <div class="grid">
+
+        <!-- 메인 금융 계산기 -->
+        <a class="card" href="https://mint-js.github.io/money/index2.html" target="_blank" style="--accent: #6366f1;">
+            <span class="card-icon">🧮</span>
+            <div class="card-title">금융 계산기</div>
+            <div class="card-desc">다양한 금융 계산을 한 곳에서 — 이자, 수익률, 투자 시뮬레이션까지</div>
+            <div class="card-bottom">
+                <span class="card-tag">메인</span>
+                <span class="card-arrow">→</span>
+            </div>
+        </a>
+
+        <!-- 주식 -->
+        <a class="card" href="https://mint-js.github.io/money/stock.html" target="_blank" style="--accent: #10b981;">
+            <span class="card-icon">📈</span>
+            <div class="card-title">주식</div>
+            <div class="card-desc">주식 투자 수익률 계산 및 포트폴리오 시뮬레이션</div>
+            <div class="card-bottom">
+                <span class="card-tag">Stock</span>
+                <span class="card-arrow">→</span>
+            </div>
+        </a>
+
+        <!-- 연금 -->
+        <a class="card" href="https://mint-js.github.io/money/dusrma.html" target="_blank" style="--accent: #f59e0b;">
+            <span class="card-icon">🏖️</span>
+            <div class="card-title">연금</div>
+            <div class="card-desc">연금 수령액 계산 및 노후 자금 시뮬레이션</div>
+            <div class="card-bottom">
+                <span class="card-tag">Pension</span>
+                <span class="card-arrow">→</span>
+            </div>
+        </a>
+
+        <!-- 은행 -->
+        <a class="card" href="https://mint-js.github.io/money/bank.html" target="_blank" style="--accent: #3b82f6;">
+            <span class="card-icon">🏦</span>
+            <div class="card-title">은행</div>
+            <div class="card-desc">예적금 이자 계산, 대출 상환 시뮬레이션</div>
+            <div class="card-bottom">
+                <span class="card-tag">Bank</span>
+                <span class="card-arrow">→</span>
+            </div>
+        </a>
+
+        <!-- 채권 -->
+        <a class="card" href="https://mint-js.github.io/money/bond.html" target="_blank" style="--accent: #ec4899;">
+            <span class="card-icon">📜</span>
+            <div class="card-title">채권</div>
+            <div class="card-desc">채권 수익률 계산 및 투자 분석 도구</div>
+            <div class="card-bottom">
+                <span class="card-tag">Bond</span>
+                <span class="card-arrow">→</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- ─── 푸터 ─── -->
+    <footer class="footer">
+        <p>© 2025 Mint-JS · Money Hub</p>
+    </footer>
+
+</body>
+</html>
