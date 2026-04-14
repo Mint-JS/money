@@ -17,7 +17,6 @@
     background-image:radial-gradient(ellipse at 20% 10%,rgba(0,212,255,.05) 0%,transparent 60%),
     radial-gradient(ellipse at 80% 80%,rgba(0,230,118,.04) 0%,transparent 60%);}
 
-  /* ─── START SCREEN ─── */
   .start-screen{position:fixed;inset:0;z-index:2000;background:var(--bg);
     background-image:radial-gradient(ellipse at 30% 20%,rgba(0,212,255,.07) 0%,transparent 60%),
     radial-gradient(ellipse at 70% 80%,rgba(0,230,118,.05) 0%,transparent 60%);
@@ -48,15 +47,23 @@
   .btn-start:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,212,255,.3);}
   .btn-start:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
 
-  /* ─── LEADERBOARD ─── */
   .lb-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden;}
   .lb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--yellow),#ff8c00);}
-  .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+  .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
   .lb-title{font-size:16px;font-weight:900;color:var(--white);}
   .lb-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+  .lb-head-btns{display:flex;gap:6px;align-items:center;}
   .lb-refresh{background:var(--bg3);border:1px solid var(--border);color:var(--muted);
     padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
   .lb-refresh:hover{color:var(--cyan);border-color:var(--cyan);}
+  .lb-admin-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+    padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
+  .lb-admin-btn:hover{color:var(--yellow);border-color:var(--yellow);}
+  .lb-admin-btn.active{background:rgba(255,214,0,.1);border-color:var(--yellow);color:var(--yellow);}
+  .lb-delete-all{background:rgba(255,68,68,.15);border:1px solid var(--red);color:var(--red);
+    padding:6px 14px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;font-weight:700;margin-bottom:10px;display:none;}
+  .lb-delete-all:hover{background:rgba(255,68,68,.3);}
+  .lb-delete-all.show{display:block;}
   .lb-list{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow-y:auto;}
   .lb-list::-webkit-scrollbar{width:3px;}
   .lb-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -80,8 +87,31 @@
   .lb-ret{font-size:15px;font-weight:900;font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;}
   .lb-ret.pos{color:var(--green)}.lb-ret.neg{color:var(--red);}
   .lb-asset{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-align:right;margin-top:2px;}
+  .lb-del-btn{background:rgba(255,68,68,.2);border:1px solid var(--red);color:var(--red);
+    padding:3px 8px;border-radius:5px;font-size:10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;
+    font-weight:700;white-space:nowrap;transition:all .15s;display:none;}
+  .lb-del-btn:hover{background:rgba(255,68,68,.4);}
+  .lb-del-btn.show{display:block;}
 
-  /* ─── HEADER ─── */
+  /* ─── ADMIN MODAL ─── */
+  .admin-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:5000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+  .admin-modal-overlay.show{display:flex;}
+  .admin-modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:30px;width:340px;text-align:center;}
+  .admin-modal-title{font-size:18px;font-weight:900;color:var(--white);margin-bottom:6px;}
+  .admin-modal-desc{font-size:12px;color:var(--muted);margin-bottom:18px;}
+  .admin-pw-input{width:100%;background:var(--bg3);border:2px solid var(--border);color:var(--white);padding:12px 14px;
+    border-radius:8px;font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;
+    outline:none;text-align:center;letter-spacing:8px;transition:border-color .2s;margin-bottom:14px;}
+  .admin-pw-input:focus{border-color:var(--yellow);}
+  .admin-pw-input.error{border-color:var(--red);animation:shake .3s ease;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .admin-modal-btns{display:flex;gap:8px;}
+  .admin-modal-btns button{flex:1;padding:11px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;}
+  .admin-btn-cancel{background:var(--bg3);color:var(--muted);}
+  .admin-btn-cancel:hover{background:var(--border);color:var(--white);}
+  .admin-btn-confirm{background:linear-gradient(135deg,var(--yellow),#ff8c00);color:#1a1200;}
+  .admin-btn-confirm:hover{opacity:.9;}
+
   .header{background:rgba(13,18,37,.95);border-bottom:1px solid var(--border);padding:12px 24px;
     display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;}
   .header-left{display:flex;align-items:center;gap:14px;}
@@ -95,7 +125,6 @@
   .stat-chip .value{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;}
   .stat-chip .value.pos{color:var(--green)}.stat-chip .value.neg{color:var(--red)}.stat-chip .value.neutral{color:var(--cyan);}
 
-  /* ─── MAIN LAYOUT ─── */
   .main{padding:20px 24px;max-width:1200px;margin:0 auto;}
   .top-row{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:end;margin-bottom:16px;}
   .stock-title{display:flex;align-items:center;gap:12px;}
@@ -168,7 +197,6 @@
   .speed-btn.active{background:rgba(0,212,255,.15);border-color:var(--cyan);color:var(--cyan);}
   .divider{height:1px;background:var(--border);margin:12px 0;}
 
-  /* ─── RESULT SCREEN ─── */
   .result-screen{display:none;position:fixed;inset:0;background:rgba(6,9,20,.97);z-index:1000;align-items:center;justify-content:center;backdrop-filter:blur(10px);padding:20px;}
   .result-screen.show{display:flex;}
   .result-inner{display:grid;grid-template-columns:420px 1fr;gap:20px;max-width:900px;width:100%;align-items:start;}
@@ -190,19 +218,22 @@
   .result-lb-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden;}
   .result-lb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--yellow),#ff8c00);}
 
-  /* ─── TICKER ─── */
   .ticker-bar{background:var(--bg2);border-bottom:1px solid var(--border);padding:6px 0;overflow:hidden;}
   .ticker-inner{display:flex;gap:40px;animation:ticker 20s linear infinite;white-space:nowrap;}
   .ticker-item{font-size:11px;font-family:'JetBrains Mono',monospace;color:var(--muted);}
   @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-  /* ─── TOAST ─── */
   .toast-container{position:fixed;top:70px;right:20px;z-index:500;display:flex;flex-direction:column;gap:8px;}
   .toast{padding:10px 16px;border-radius:8px;font-size:13px;font-weight:700;backdrop-filter:blur(10px);border:1px solid;transform:translateX(120%);transition:transform .3s ease;max-width:260px;line-height:1.4;}
   .toast.show{transform:translateX(0);}
   .toast.success{background:rgba(0,230,118,.15);border-color:var(--green);color:var(--green);}
   .toast.error{background:rgba(255,68,68,.15);border-color:var(--red);color:var(--red);}
   .toast.info{background:rgba(0,212,255,.15);border-color:var(--cyan);color:var(--cyan);}
+
+  /* connection status */
+  .conn-status{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;}
+  .conn-status.online{color:var(--green);background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);}
+  .conn-status.offline{color:var(--red);background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);}
 
   @media(max-width:768px){
     .start-layout,.result-inner{grid-template-columns:1fr;}
@@ -215,6 +246,21 @@
 </style>
 </head>
 <body>
+
+<!-- ══ ADMIN PASSWORD MODAL ══ -->
+<div class="admin-modal-overlay" id="adminModal">
+  <div class="admin-modal">
+    <div style="font-size:32px;margin-bottom:8px;">🔐</div>
+    <div class="admin-modal-title">관리자 인증</div>
+    <div class="admin-modal-desc">명예의 전당을 관리하려면<br>관리자 비밀번호를 입력하세요.</div>
+    <input class="admin-pw-input" id="adminPwInput" type="password" maxlength="10" placeholder="····"
+      onkeydown="if(event.key==='Enter')confirmAdmin()">
+    <div class="admin-modal-btns">
+      <button class="admin-btn-cancel" onclick="closeAdminModal()">취소</button>
+      <button class="admin-btn-confirm" onclick="confirmAdmin()">🔓 인증</button>
+    </div>
+  </div>
+</div>
 
 <!-- ══ START SCREEN ══ -->
 <div class="start-screen" id="startScreen">
@@ -235,9 +281,13 @@
     </div>
     <div class="lb-card">
       <div class="lb-head">
-        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">이 링크에 접속한 모든 학생의 기록</div></div>
-        <button class="lb-refresh" onclick="loadLb('startLbList')">🔄 새로고침</button>
+        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">모든 학생의 기록 <span class="conn-status" id="connStatus">확인중</span></div></div>
+        <div class="lb-head-btns">
+          <button class="lb-admin-btn" id="adminBtnStart" onclick="openAdminModal('start')">🔒 관리</button>
+          <button class="lb-refresh" onclick="loadLb('startLbList')">🔄 새로고침</button>
+        </div>
       </div>
+      <button class="lb-delete-all" id="deleteAllBtnStart" onclick="deleteAllLb('startLbList')">🗑️ 전체 기록 삭제</button>
       <div class="lb-list" id="startLbList"><div class="lb-loading">⏳ 기록 불러오는 중...</div></div>
     </div>
   </div>
@@ -369,8 +419,12 @@
     <div class="result-lb-card">
       <div class="lb-head" style="margin-bottom:16px;">
         <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">전체 학생 순위</div></div>
-        <button class="lb-refresh" onclick="loadLb('resultLbList')">🔄 새로고침</button>
+        <div class="lb-head-btns">
+          <button class="lb-admin-btn" id="adminBtnResult" onclick="openAdminModal('result')">🔒 관리</button>
+          <button class="lb-refresh" onclick="loadLb('resultLbList')">🔄 새로고침</button>
+        </div>
       </div>
+      <button class="lb-delete-all" id="deleteAllBtnResult" onclick="deleteAllLb('resultLbList')">🗑️ 전체 기록 삭제</button>
       <div class="lb-list" id="resultLbList"><div class="lb-loading">⏳ 불러오는 중...</div></div>
     </div>
   </div>
@@ -379,6 +433,218 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
+/* ╔══════════════════════════════════════════════════════╗
+   ║  🔥 Firebase 설정 - 아래 URL만 바꾸면 됩니다!       ║
+   ╚══════════════════════════════════════════════════════╝ */
+const FIREBASE_URL = 'https://money-8639b-default-rtdb.asia-southeast1.firebasedatabase.app/';  // ← 여기에 본인의 Firebase URL 입력! (예: https://my-project-default-rtdb.firebaseio.com)
+
+const ADMIN_PASSWORD = '1111';
+let adminMode = false;
+let adminTarget = 'start'; // 'start' or 'result'
+
+// ─── Firebase 연결 확인 ───
+async function checkConnection() {
+  const el = document.getElementById('connStatus');
+  if (!FIREBASE_URL) {
+    el.textContent = '⚠️ Firebase 미설정 (로컬 모드)';
+    el.className = 'conn-status offline';
+    return false;
+  }
+  try {
+    const res = await fetch(FIREBASE_URL + '/.json?shallow=true', { method: 'GET' });
+    if (res.ok) { el.textContent = '🟢 온라인'; el.className = 'conn-status online'; return true; }
+    else { el.textContent = '🔴 연결 실패'; el.className = 'conn-status offline'; return false; }
+  } catch(e) { el.textContent = '🔴 연결 실패'; el.className = 'conn-status offline'; return false; }
+}
+
+function useFirebase() { return FIREBASE_URL && FIREBASE_URL.length > 10; }
+
+// ─── 이름 → Firebase 키 변환 (특수문자 처리) ───
+function nameToKey(name) {
+  return btoa(unescape(encodeURIComponent(name))).replace(/[.\/$/\[\]#+=]/g, '_');
+}
+
+// ─── 저장 (Firebase 또는 localStorage) ───
+async function saveToLb(rec) {
+  // localStorage에도 항상 저장 (백업)
+  try {
+    const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
+    if (!local[rec.name] || local[rec.name].returnPct < rec.returnPct) {
+      local[rec.name] = rec;
+      localStorage.setItem('samsung_lb', JSON.stringify(local));
+    }
+  } catch(e) {}
+
+  // Firebase 저장
+  if (useFirebase()) {
+    try {
+      const key = nameToKey(rec.name);
+      const res = await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json');
+      const existing = await res.json();
+      if (existing && existing.returnPct >= rec.returnPct) return; // 더 높은 기록만 갱신
+      await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(rec)
+      });
+    } catch(e) { console.warn('Firebase save failed:', e); }
+  }
+}
+
+// ─── 불러오기 ───
+async function loadLb(targetId) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  el.innerHTML = '<div class="lb-loading">⏳ 불러오는 중...</div>';
+
+  let entries = [];
+
+  if (useFirebase()) {
+    try {
+      const res = await fetch(FIREBASE_URL + '/leaderboard.json');
+      const data = await res.json();
+      if (data) entries = Object.values(data);
+    } catch(e) {
+      console.warn('Firebase load failed, using localStorage:', e);
+      try {
+        const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
+        entries = Object.values(local);
+      } catch(e2) {}
+    }
+  } else {
+    try {
+      const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
+      entries = Object.values(local);
+    } catch(e) {}
+  }
+
+  if (!entries.length) {
+    el.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">🌱</div>아직 기록이 없어요.<br>첫 번째 투자자가 되어보세요!</div>';
+    return;
+  }
+
+  entries.sort((a, b) => b.returnPct - a.returnPct);
+  renderLbEntries(el, entries);
+}
+
+// ─── 개별 삭제 ───
+async function deleteLbEntry(name, targetId) {
+  if (!confirm('"' + name + '" 님의 기록을 삭제할까요?')) return;
+
+  // localStorage 삭제
+  try {
+    const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
+    delete local[name];
+    localStorage.setItem('samsung_lb', JSON.stringify(local));
+  } catch(e) {}
+
+  // Firebase 삭제
+  if (useFirebase()) {
+    try {
+      const key = nameToKey(name);
+      await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json', { method: 'DELETE' });
+    } catch(e) { console.warn('Firebase delete failed:', e); }
+  }
+
+  showToast('🗑️ "' + name + '" 기록 삭제됨', 'info');
+  await loadLb(targetId);
+}
+
+// ─── 전체 삭제 ───
+async function deleteAllLb(targetId) {
+  if (!confirm('⚠️ 정말로 모든 기록을 삭제할까요?\n이 작업은 되돌릴 수 없습니다!')) return;
+
+  // localStorage 삭제
+  localStorage.removeItem('samsung_lb');
+
+  // Firebase 삭제
+  if (useFirebase()) {
+    try {
+      await fetch(FIREBASE_URL + '/leaderboard.json', { method: 'DELETE' });
+    } catch(e) { console.warn('Firebase deleteAll failed:', e); }
+  }
+
+  showToast('🗑️ 전체 기록이 삭제되었습니다', 'info');
+  await loadLb(targetId);
+}
+
+// ─── 리더보드 렌더링 ───
+function renderLbEntries(el, entries) {
+  const medal = ['🥇','🥈','🥉'];
+  const mClass = ['r1','r2','r3'];
+  const rowClass = ['top1','top2','top3'];
+  el.innerHTML = entries.slice(0, 20).map((e, i) => {
+    const isMe = e.name === state.playerName;
+    const retStr = (e.returnPct >= 0 ? '+' : '') + e.returnPct.toFixed(2) + '%';
+    const rankHtml = i < 3 ? '<span class="lb-rank ' + mClass[i] + '">' + medal[i] + '</span>' : '<span class="lb-rank rn">' + (i+1) + '</span>';
+    const meLabel = isMe ? ' <span style="color:var(--cyan);font-size:10px">(나)</span>' : '';
+    const delBtn = '<button class="lb-del-btn ' + (adminMode ? 'show' : '') + '" onclick="deleteLbEntry(\''+e.name.replace(/'/g,"\\'")+'\',\''+getCurrentLbTarget()+'\')">삭제</button>';
+    return '<div class="lb-row ' + (i < 3 ? rowClass[i] : '') + ' ' + (isMe ? 'me' : '') + '" style="animation-delay:' + (i*.04) + 's">'
+      + rankHtml
+      + '<div class="lb-info"><div class="lb-name">' + e.name + meLabel + '</div><div class="lb-meta">' + e.date + ' · ' + e.tradeCount + '회 거래</div></div>'
+      + '<div style="display:flex;align-items:center;gap:8px;"><div><div class="lb-ret ' + (e.returnPct >= 0 ? 'pos' : 'neg') + '">' + retStr + '</div><div class="lb-asset">₩' + e.finalAsset.toLocaleString() + '</div></div>' + delBtn + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function getCurrentLbTarget() {
+  const resultVisible = document.getElementById('resultScreen').classList.contains('show');
+  return resultVisible ? 'resultLbList' : 'startLbList';
+}
+
+// ─── 관리자 모달 ───
+function openAdminModal(target) {
+  adminTarget = target;
+  if (adminMode) {
+    // 이미 관리자 모드면 해제
+    adminMode = false;
+    updateAdminUI();
+    const tid = target === 'start' ? 'startLbList' : 'resultLbList';
+    loadLb(tid);
+    showToast('🔒 관리자 모드 해제', 'info');
+    return;
+  }
+  document.getElementById('adminModal').classList.add('show');
+  document.getElementById('adminPwInput').value = '';
+  document.getElementById('adminPwInput').className = 'admin-pw-input';
+  setTimeout(() => document.getElementById('adminPwInput').focus(), 100);
+}
+function closeAdminModal() {
+  document.getElementById('adminModal').classList.remove('show');
+}
+function confirmAdmin() {
+  const pw = document.getElementById('adminPwInput').value;
+  if (pw === ADMIN_PASSWORD) {
+    adminMode = true;
+    closeAdminModal();
+    updateAdminUI();
+    const tid = adminTarget === 'start' ? 'startLbList' : 'resultLbList';
+    loadLb(tid);
+    showToast('🔓 관리자 모드 활성화!', 'success');
+  } else {
+    document.getElementById('adminPwInput').className = 'admin-pw-input error';
+    showToast('❌ 비밀번호가 틀렸습니다', 'error');
+    setTimeout(() => { document.getElementById('adminPwInput').className = 'admin-pw-input'; }, 400);
+  }
+}
+function updateAdminUI() {
+  const btns = [document.getElementById('adminBtnStart'), document.getElementById('adminBtnResult')];
+  btns.forEach(b => {
+    if (b) {
+      b.textContent = adminMode ? '🔓 관리중' : '🔒 관리';
+      b.className = 'lb-admin-btn' + (adminMode ? ' active' : '');
+    }
+  });
+  const dels = [document.getElementById('deleteAllBtnStart'), document.getElementById('deleteAllBtnResult')];
+  dels.forEach(d => { if (d) d.className = 'lb-delete-all' + (adminMode ? ' show' : ''); });
+  // 삭제 버튼 표시/숨김
+  document.querySelectorAll('.lb-del-btn').forEach(b => b.className = 'lb-del-btn' + (adminMode ? ' show' : ''));
+}
+
+// ══════════════════════════════════════════════
+// 이하 기존 게임 로직 (변경 없음)
+// ══════════════════════════════════════════════
+
 const stockData=[
   {d:'2020-01',p:55800,n:'반도체 업황 개선 기대감으로 외국인 매수세 유입',t:'bull'},
   {d:'2020-02',p:52600,n:'코로나19 국내 확산 시작, 글로벌 증시 불안감 고조',t:'bear'},
@@ -442,54 +708,15 @@ const stockData=[
   {d:'2024-12',p:53800,n:'연말 배당 기대감 일부 지지, 저가 매수 vs 추가 하락 논쟁',t:'bear'},
 ];
 
-const INITIAL_CASH=1000000;
-const LB_KEY='samsung-sim-v1:';
-let state={idx:0,cash:INITIAL_CASH,shares:0,avgBuy:0,tradeCount:0,step:1,history:[],chart:null,activeTab:'buy',playerName:''};
+const INITIAL_CASH = 1000000;
+let state = {idx:0, cash:INITIAL_CASH, shares:0, avgBuy:0, tradeCount:0, step:1, history:[], chart:null, activeTab:'buy', playerName:''};
 
-// ─── START ───
-function startGame(){
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name){document.getElementById('nameInput').focus();showToast('이름을 입력해주세요!','error');return;}
-  state.playerName=name;
-  document.getElementById('playerBadge').textContent='👤 '+name;
+function startGame() {
+  const name = document.getElementById('nameInput').value.trim();
+  if (!name) { document.getElementById('nameInput').focus(); showToast('이름을 입력해주세요!','error'); return; }
+  state.playerName = name;
+  document.getElementById('playerBadge').textContent = '👤 ' + name;
   document.getElementById('startScreen').classList.add('hidden');
-}
-
-// ─── LEADERBOARD ───
-async function saveToLb(rec){
-  try{ await window.storage.set(LB_KEY+rec.name,JSON.stringify(rec),true); }catch(e){console.warn(e);}
-}
-
-async function loadLb(targetId){
-  const el=document.getElementById(targetId);
-  if(!el)return;
-  el.innerHTML='<div class="lb-loading">⏳ 불러오는 중...</div>';
-  try{
-    const res=await window.storage.list(LB_KEY,true);
-    const keys=res?.keys||[];
-    if(!keys.length){el.innerHTML='<div class="lb-empty"><div class="lb-empty-icon">🌱</div>아직 기록이 없어요.<br>첫 번째 투자자가 되어보세요!</div>';return;}
-    const entries=[];
-    for(const k of keys){try{const r=await window.storage.get(k,true);if(r?.value)entries.push(JSON.parse(r.value));}catch(e){}}
-    entries.sort((a,b)=>b.returnPct-a.returnPct);
-    renderLbEntries(el,entries);
-  }catch(e){el.innerHTML='<div class="lb-empty">기록을 불러올 수 없습니다 😢</div>';}
-}
-
-function renderLbEntries(el,entries){
-  const medal=['🥇','🥈','🥉'];
-  const mClass=['r1','r2','r3'];
-  const rowClass=['top1','top2','top3'];
-  el.innerHTML=entries.slice(0,20).map((e,i)=>{
-    const isMe=e.name===state.playerName;
-    const retStr=(e.returnPct>=0?'+':'')+e.returnPct.toFixed(2)+'%';
-    const rankHtml=i<3?`<span class="lb-rank ${mClass[i]}">${medal[i]}</span>`:`<span class="lb-rank rn">${i+1}</span>`;
-    const meLabel=isMe?' <span style="color:var(--cyan);font-size:10px">(나)</span>':'';
-    return`<div class="lb-row ${i<3?rowClass[i]:''} ${isMe?'me':''}" style="animation-delay:${i*.04}s">
-      ${rankHtml}
-      <div class="lb-info"><div class="lb-name">${e.name}${meLabel}</div><div class="lb-meta">${e.date} · ${e.tradeCount}회 거래</div></div>
-      <div><div class="lb-ret ${e.returnPct>=0?'pos':'neg'}">${retStr}</div><div class="lb-asset">₩${e.finalAsset.toLocaleString()}</div></div>
-    </div>`;
-  }).join('');
 }
 
 // ─── TICKER ───
@@ -497,11 +724,10 @@ function renderLbEntries(el,entries){
   const items=['SK하이닉스','LG에너지솔루션','현대차','NAVER','카카오','셀트리온','KB금융','포스코홀딩스','기아','삼성SDI'];
   const vals=[130000,390000,195000,165000,35850,175500,62800,380000,92400,310000];
   let h='';
-  for(let i=0;i<2;i++) items.forEach((n,j)=>{const r=(Math.random()-.5)*4;h+=`<span class="ticker-item">${n} <span style="color:${r>0?'var(--green)':'var(--red)'}">${vals[j].toLocaleString()}원 ${r>0?'▲':'▼'}${Math.abs(r).toFixed(2)}%</span></span>`;});
+  for(let i=0;i<2;i++) items.forEach((n,j)=>{const r=(Math.random()-.5)*4;h+='<span class="ticker-item">'+n+' <span style="color:'+(r>0?'var(--green)':'var(--red)')+'">'+vals[j].toLocaleString()+'원 '+(r>0?'▲':'▼')+Math.abs(r).toFixed(2)+'%</span></span>';});
   document.getElementById('tickerInner').innerHTML=h;
 })();
 
-// ─── CHART ───
 function initChart(){
   const ctx=document.getElementById('priceChart').getContext('2d');
   const g=ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,'rgba(0,212,255,.25)');g.addColorStop(1,'rgba(0,212,255,0)');
@@ -518,15 +744,14 @@ function updateChart(){
   state.chart.update('none');
 }
 
-// ─── UI ───
 function updateUI(){
   const cur=stockData[state.idx],prev=state.idx>0?stockData[state.idx-1]:null,p=cur.p;
   const chg=prev?(p-prev.p)/prev.p*100:0,abs=prev?p-prev.p:0;
   document.getElementById('priceDisplay').textContent='₩'+p.toLocaleString();
   const pcd=document.getElementById('priceChange');
   if(!prev){pcd.textContent='-';pcd.className='price-change neutral';}
-  else if(chg>0){pcd.textContent=`▲${abs.toLocaleString()} (+${chg.toFixed(2)}%)`;pcd.className='price-change pos';}
-  else if(chg<0){pcd.textContent=`▼${Math.abs(abs).toLocaleString()} (${chg.toFixed(2)}%)`;pcd.className='price-change neg';}
+  else if(chg>0){pcd.textContent='▲'+abs.toLocaleString()+' (+'+chg.toFixed(2)+'%)';pcd.className='price-change pos';}
+  else if(chg<0){pcd.textContent='▼'+Math.abs(abs).toLocaleString()+' ('+chg.toFixed(2)+'%)';pcd.className='price-change neg';}
   else{pcd.textContent='0 (0.00%)';pcd.className='price-change neutral';}
   document.getElementById('dateDisplay').textContent=cur.d+' 기준가';
   const sv=state.shares*p,ta=state.cash+sv;
@@ -546,7 +771,7 @@ function updateUI(){
   const pct=Math.round(state.idx/(stockData.length-1)*100);
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=pct+'%';
-  document.getElementById('progressLabel').textContent=`${cur.d} (${state.idx+1}/${stockData.length})`;
+  document.getElementById('progressLabel').textContent=cur.d+' ('+(state.idx+1)+'/'+stockData.length+')';
   updateTradeInfo();
 }
 function updateTradeInfo(){
@@ -555,16 +780,12 @@ function updateTradeInfo(){
   document.getElementById('ti-qty').textContent=q+' 주';
   document.getElementById('ti-total').textContent='₩'+(p*q).toLocaleString();
 }
-
-// ─── NEWS ───
 function addNews(item){
   const f=document.getElementById('newsFeed'),el=document.createElement('div');
   el.className='news-item '+(item.t==='bull'?'bull':item.t==='bear'?'bear':'');
-  el.innerHTML=`<div class="news-date">${item.d}</div>${item.n}`;
+  el.innerHTML='<div class="news-date">'+item.d+'</div>'+item.n;
   f.insertBefore(el,f.firstChild);if(f.children.length>6)f.removeChild(f.lastChild);
 }
-
-// ─── TRADE ───
 function switchTab(tab){
   state.activeTab=tab;
   const btn=document.getElementById('tradeBtn');
@@ -584,11 +805,11 @@ function executeTrade(){
   if(state.activeTab==='buy'){
     const c=p*q;if(c>state.cash){showToast('현금이 부족합니다!','error');return;}
     state.avgBuy=(state.avgBuy*state.shares+c)/(state.shares+q);state.shares+=q;state.cash-=c;state.tradeCount++;
-    addHistory('buy',q,p,null);showToast(`✅ ${q}주 매수!\n₩${c.toLocaleString()}`,'success');
+    addHistory('buy',q,p,null);showToast('✅ '+q+'주 매수!\n₩'+c.toLocaleString(),'success');
   }else{
     if(q>state.shares){showToast('보유 주식이 부족합니다!','error');return;}
     const r=p*q,pnl=r-state.avgBuy*q;state.shares-=q;state.cash+=r;if(!state.shares)state.avgBuy=0;state.tradeCount++;
-    addHistory('sell',q,p,pnl);showToast(`💸 ${q}주 매도!\n손익: ${pnl>=0?'+':''}₩${Math.round(pnl).toLocaleString()}`,pnl>=0?'success':'error');
+    addHistory('sell',q,p,pnl);showToast('💸 '+q+'주 매도!\n손익: '+(pnl>=0?'+':'')+'₩'+Math.round(pnl).toLocaleString(),pnl>=0?'success':'error');
   }
   updateUI();updateChart();
 }
@@ -597,12 +818,10 @@ function renderHistory(){
   const list=document.getElementById('historyList');
   if(!state.history.length){list.innerHTML='<div class="no-history">아직 거래가 없습니다</div>';return;}
   list.innerHTML=state.history.slice(0,20).map(h=>{
-    const ps=h.pnl!==null?`<span class="hi-pnl" style="color:${h.pnl>=0?'var(--green)':'var(--red)'}">${h.pnl>=0?'+':''}₩${Math.round(h.pnl).toLocaleString()}</span>`:'';
-    return`<div class="history-item"><span class="hi-type ${h.type}">${h.type==='buy'?'매수':'매도'}</span><span class="hi-info">${h.date} | ${h.qty}주 @₩${h.price.toLocaleString()}</span>${ps}</div>`;
+    const ps=h.pnl!==null?'<span class="hi-pnl" style="color:'+(h.pnl>=0?'var(--green)':'var(--red)')+'">'+(h.pnl>=0?'+':'')+'₩'+Math.round(h.pnl).toLocaleString()+'</span>':'';
+    return '<div class="history-item"><span class="hi-type '+h.type+'">'+(h.type==='buy'?'매수':'매도')+'</span><span class="hi-info">'+h.date+' | '+h.qty+'주 @₩'+h.price.toLocaleString()+'</span>'+ps+'</div>';
   }).join('');
 }
-
-// ─── TIME ───
 function setStep(s){
   state.step=s;
   document.querySelectorAll('.speed-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.step)===s));
@@ -616,7 +835,6 @@ function advanceTime(){
   if(state.idx>=stockData.length-1){document.getElementById('btnNext').disabled=true;document.getElementById('btnNext').textContent='시뮬레이션 완료!';setTimeout(showResult,1200);}
 }
 
-// ─── RESULT ───
 async function showResult(){
   const fp=stockData[stockData.length-1].p,sv=state.shares*fp,ta=state.cash+sv;
   const ret=(ta-INITIAL_CASH)/INITIAL_CASH*100;
@@ -641,18 +859,24 @@ async function showResult(){
   document.getElementById('resultGrade').textContent=grade;
   document.getElementById('resultScreen').classList.add('show');
   await loadLb('resultLbList');
-  // Show rank badge
-  try{
-    const res=await window.storage.list(LB_KEY,true);
-    const entries=[];
-    for(const k of res?.keys||[]){try{const r=await window.storage.get(k,true);if(r?.value)entries.push(JSON.parse(r.value));}catch(e){}}
-    entries.sort((a,b)=>b.returnPct-a.returnPct);
-    const rank=entries.findIndex(e=>e.name===state.playerName)+1;
-    if(rank>0){
-      const rb=document.getElementById('resultRankBadge');rb.style.display='block';
-      rb.textContent=rank===1?'🥇 전체 1위! 최고의 투자자예요!':rank===2?'🥈 전체 2위!':rank===3?'🥉 전체 3위!': `📊 전체 ${rank}위 / ${entries.length}명 중`;
+  // 순위 배지
+  try {
+    let entries = [];
+    if (useFirebase()) {
+      const res = await fetch(FIREBASE_URL + '/leaderboard.json');
+      const data = await res.json();
+      if (data) entries = Object.values(data);
+    } else {
+      const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
+      entries = Object.values(local);
     }
-  }catch(e){}
+    entries.sort((a,b) => b.returnPct - a.returnPct);
+    const rank = entries.findIndex(e => e.name === state.playerName) + 1;
+    if (rank > 0) {
+      const rb = document.getElementById('resultRankBadge'); rb.style.display = 'block';
+      rb.textContent = rank===1?'🥇 전체 1위! 최고의 투자자예요!':rank===2?'🥈 전체 2위!':rank===3?'🥉 전체 3위!':'📊 전체 '+rank+'위 / '+entries.length+'명 중';
+    }
+  } catch(e) {}
 }
 
 function restartGame(){
@@ -666,18 +890,23 @@ function restartGame(){
   document.getElementById('btnNext').textContent=state.step===1?'다음 달로 이동 →':'3개월 후로 이동 →';
   document.getElementById('newsFeed').innerHTML='<div class="news-item"><div class="news-date">시작</div>시뮬레이션을 재시작합니다. <strong>2020년 1월</strong>부터 다시 시작해보세요! 이번엔 더 잘 할 수 있어요 💪</div>';
   renderHistory();updateUI();updateChart();switchTab('buy');loadLb('startLbList');
+  // 관리자 모드 해제
+  adminMode = false;
+  updateAdminUI();
 }
 
-// ─── TOAST ───
-function showToast(msg,type='info'){
+function showToast(msg, type='info'){
   const t=document.createElement('div');t.className='toast '+type;t.innerHTML=msg.replace(/\n/g,'<br>');
   document.getElementById('toastContainer').appendChild(t);
   setTimeout(()=>t.classList.add('show'),50);
   setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2800);
 }
 
-// ─── INIT ───
-window.onload=()=>{initChart();updateUI();updateChart();loadLb('startLbList');};
+window.onload = async () => {
+  initChart(); updateUI(); updateChart();
+  await checkConnection();
+  loadLb('startLbList');
+};
 </script>
 </body>
 </html>
