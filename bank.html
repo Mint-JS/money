@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>예금 vs 적금 진짜 이자 비교기 (발생이자 상세내역)</title>
+    <title>예금 vs 적금 진짜 이자 비교기 (단순 계산 패치)</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #2c3e50; --deposit: #2980b9; --savings: #8e44ad; --bg: #f8f9fa; --highlight: #e74c3c; }
-        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 40px 20px; }
+        body { font-family: 'Pretendard', sans-serif; background-color: var(--bg); display: flex; justify-content: center; padding: 40px 20px; color: #333; }
         .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 800px; width: 100%; }
         h2 { color: var(--primary); text-align: center; margin-bottom: 25px; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
@@ -16,20 +16,25 @@
         .input-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1em; }
         .rate-box { background: #f0f4f8; padding: 15px; border-radius: 8px; border-left: 4px solid var(--deposit); }
         .rate-box.sav { background: #f5eef8; border-left: 4px solid var(--savings); }
-        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-size: 1.1em; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         button:hover { background: #1a252f; }
         #result { margin-top: 30px; display: none; }
+        
         .result-box { padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fff; border: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .deposit-box { border-left: 5px solid var(--deposit); }
         .savings-box { border-left: 5px solid var(--savings); }
-        .chart-container { position: relative; height: 250px; width: 100%; margin-top: 20px; }
-        .money { font-size: 1.3em; font-weight: bold; }
-        .tax-info { font-size: 0.8em; color: #7f8c8d; text-align: right; margin-top: -10px; margin-bottom: 15px; }
-        #winnerMsg { margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.1em; }
         
-        /* 🔥 넓어진 표 스타일 */
+        .chart-container { position: relative; height: 250px; width: 100%; margin-top: 20px; }
+        
+        .money { font-size: 1.3em; font-weight: bold; }
+        .yield-text { font-size: 0.9em; font-weight: bold; margin-top: 5px; background: #f4f6f7; padding: 4px 8px; border-radius: 4px; display: inline-block; }
+        
+        .tax-info { font-size: 0.85em; color: #e67e22; text-align: right; margin-top: -10px; margin-bottom: 15px; font-weight: bold; }
+        #winnerMsg { margin-top: 20px; padding: 15px; border-radius: 8px; font-weight: bold; text-align: center; font-size: 1.1em; line-height: 1.5; }
+        
+        /* 표 스타일 */
         .table-wrapper { margin-top: 30px; overflow-x: auto; }
-        .styled-table { width: 100%; border-collapse: collapse; font-size: 0.8em; text-align: right; white-space: nowrap; }
+        .styled-table { width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: right; white-space: nowrap; }
         .styled-table th, .styled-table td { padding: 10px 8px; border-bottom: 1px solid #ddd; }
         .styled-table th { background-color: var(--primary); color: white; text-align: center; position: sticky; top: 0; }
         .styled-table tbody tr:nth-of-type(even) { background-color: #f9f9f9; }
@@ -40,6 +45,8 @@
         .th-sav { background-color: var(--savings) !important; }
         .month-col { text-align: center; font-weight: bold; background: #eee; }
         .monthly-yield { color: #555; }
+
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .full { grid-column: span 1; } }
     </style>
 </head>
 <body>
@@ -70,14 +77,17 @@
     <button id="calcBtn">진짜 승자 및 상세 내역 확인하기</button>
 
     <div id="result">
-        <p class="tax-info">※ 세금(15.4%)을 떼고 내 통장에 들어오는 '진짜 이자' 기준</p>
+        <p class="tax-info">※ 이해를 돕기 위해 세금(15.4%)은 계산에서 제외했습니다 (순수 이자 비교)</p>
         
         <div class="result-box deposit-box">
             <div>
                 <h3 style="margin:0; color: var(--deposit); font-size: 1.1em;">정기 예금</h3>
                 <span style="font-size: 0.85em; color:#666;" id="depDesc"></span>
             </div>
-            <div class="money" style="color: var(--deposit);" id="depInterest"></div>
+            <div style="text-align: right;">
+                <div class="money" style="color: var(--deposit);" id="depInterest"></div>
+                <div class="yield-text" style="color: var(--deposit);" id="depYield"></div>
+            </div>
         </div>
 
         <div class="result-box savings-box">
@@ -85,7 +95,10 @@
                 <h3 style="margin:0; color: var(--savings); font-size: 1.1em;">정기 적금</h3>
                 <span style="font-size: 0.85em; color:#666;" id="savDesc"></span>
             </div>
-            <div class="money" style="color: var(--savings);" id="savInterest"></div>
+            <div style="text-align: right;">
+                <div class="money" style="color: var(--savings);" id="savInterest"></div>
+                <div class="yield-text" style="color: var(--savings);" id="savYield"></div>
+            </div>
         </div>
 
         <div id="winnerMsg"></div>
@@ -95,7 +108,7 @@
         </div>
 
         <div class="table-wrapper">
-            <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">📅 매월 통장에 쌓이는 내역 (세후)</h3>
+            <h3 style="text-align: center; color: var(--primary); margin-bottom: 10px;">📅 매월 은행에서 붙여주는 순수 이자 내역</h3>
             <table class="styled-table" id="detailTable">
                 <thead>
                     <tr>
@@ -112,8 +125,7 @@
                         <th class="th-sav" style="font-size:0.85em;">누적 이자</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
     </div>
@@ -133,25 +145,32 @@
         const savRate = parseFloat(document.getElementById('savRate').value) / 100;
 
         const monthly = principal / months;
-        const taxMultiplier = 0.846; // 15.4% 세금 공제 후
 
-        // 최종 이자 계산
-        const depInterestPostTax = principal * depRate * (months / 12) * taxMultiplier;
-        const savInterestPostTax = monthly * savRate * (months * (months + 1) / 2) / 12 * taxMultiplier;
+        // 🔥 세금 공제 제거: 순수 이자 계산
+        const depInterest = principal * depRate * (months / 12);
+        const savInterest = monthly * savRate * (months * (months + 1) / 2) / 12;
+
+        // 원금 대비 실제 수익률 계산
+        const depRealYield = (depInterest / principal) * 100;
+        const savRealYield = (savInterest / principal) * 100;
 
         document.getElementById('result').style.display = 'block';
         document.getElementById('depDesc').innerText = `처음에 ${formatMoney(principal)} 한 번에 넣기`;
         document.getElementById('savDesc').innerText = `매월 ${formatMoney(monthly)}씩 쪼개서 넣기`;
-        document.getElementById('depInterest').innerText = formatMoney(depInterestPostTax);
-        document.getElementById('savInterest').innerText = formatMoney(savInterestPostTax);
+        
+        document.getElementById('depInterest').innerText = formatMoney(depInterest);
+        document.getElementById('savInterest').innerText = formatMoney(savInterest);
+        
+        document.getElementById('depYield').innerText = `원금 대비 실수익률: ${depRealYield.toFixed(2)}%`;
+        document.getElementById('savYield').innerText = `원금 대비 실수익률: ${savRealYield.toFixed(2)}%`;
 
         const msgBox = document.getElementById('winnerMsg');
-        if (depInterestPostTax > savInterestPostTax) {
-            msgBox.innerHTML = `💡 금리는 적금이 <b>${(savRate*100 - depRate*100).toFixed(1)}%p</b> 더 높지만,<br>실제 돈은 <b>예금</b>이 더 많이 들어옵니다!`;
+        if (depInterest > savInterest) {
+            msgBox.innerHTML = `💡 은행 표면 금리는 적금이 더 높지만,<br>실제 이득은 <b>예금(${depRealYield.toFixed(2)}%)</b>이 적금(${savRealYield.toFixed(2)}%)보다 큽니다!`;
             msgBox.style.backgroundColor = "#e8f4f8";
             msgBox.style.color = "var(--deposit)";
-        } else if (savInterestPostTax > depInterestPostTax) {
-            msgBox.innerHTML = `💡 이 조건에서는 <b>적금</b>이 실제 이자도 더 많습니다!`;
+        } else if (savInterest > depInterest) {
+            msgBox.innerHTML = `💡 이 조건에서는 <b>적금</b>이 실제 이득도 더 큽니다!`;
             msgBox.style.backgroundColor = "#f5eef8";
             msgBox.style.color = "var(--savings)";
         } else {
@@ -160,29 +179,27 @@
             msgBox.style.color = "#333";
         }
 
-        // 🔥 매월 상세 내역 표 생성 로직 (발생이자 추가)
+        // 매월 상세 내역 표 생성 로직 (세금 제외)
         const tbody = document.getElementById('tableBody');
         tbody.innerHTML = ''; 
 
         let currentDepInterest = 0;
         let currentSavInterest = 0;
         
-        // 예금: 매달 똑같은 금액의 이자가 발생함
-        const thisMonthDepInterest = (principal * depRate / 12) * taxMultiplier;
+        // 예금은 매달 이자가 동일함 (단리 기준)
+        const thisMonthDepInterest = principal * depRate / 12;
 
         for (let i = 1; i <= months; i++) {
-            // 예금
             currentDepInterest += thisMonthDepInterest;
             
-            // 적금: 그 달까지 모인 원금에 비례해서 이번 달 이자가 다르게 발생함
             const currentSavPrincipal = monthly * i;
-            const thisMonthSavInterest = (currentSavPrincipal * savRate / 12) * taxMultiplier;
+            // 적금은 쌓인 원금에 대해서만 이자가 붙음
+            const thisMonthSavInterest = currentSavPrincipal * savRate / 12;
             currentSavInterest += thisMonthSavInterest;
 
             const tr = document.createElement('tr');
             tr.innerHTML = `
                 <td class="month-col">${i}개월</td>
-                
                 <td class="dep-col">${formatMoney(principal)}</td>
                 <td class="dep-col monthly-yield">+${formatMoney(thisMonthDepInterest)}</td>
                 <td class="dep-col" style="color:var(--deposit); font-weight:bold;">${formatMoney(currentDepInterest)}</td>
@@ -202,7 +219,7 @@
             data: {
                 labels: ['정기 예금 (한 번에)', '정기 적금 (쪼개서)'],
                 datasets: [{
-                    data: [Math.floor(depInterestPostTax), Math.floor(savInterestPostTax)],
+                    data: [Math.floor(depInterest), Math.floor(savInterest)],
                     backgroundColor: ['#2980b9', '#8e44ad'],
                     borderRadius: 8
                 }]

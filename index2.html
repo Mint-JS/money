@@ -51,7 +51,6 @@
         .sum-row { grid-column: span 3; text-align: center; font-size: 1.1em; font-weight: bold; margin-bottom: 5px; background: #eaeded; padding: 12px; border-radius: 8px; }
         .sum-row.highlight { background: #eafaf1; border: 2px solid #2ecc71; margin-top: 5px; padding: 15px; }
         
-        /* 🔥 파산 상태를 강조하는 스타일 */
         .sum-row.danger { background: #1a1a1a; border: 2px solid #e74c3c; color: #fff; margin-top: 5px; padding: 20px; }
         .shortfall-box { background: rgba(231, 76, 60, 0.2); border: 1px dashed #e74c3c; padding: 15px; border-radius: 8px; margin-top: 15px; }
         .shortfall-label { font-size: 0.9em; color: #ffcccc; display: block; margin-bottom: 5px; }
@@ -65,6 +64,7 @@
         .success { background: #eafaf1; border: 2px solid #2ecc71; color: #27ae60; }
         .bankrupt { background: #1a1a1a; border: 2px solid #e74c3c; color: #e74c3c; }
         .inflation-alert { background: #fff3e0; border: 2px solid #e67e22; color: #d35400; margin-top: 15px; padding: 15px; border-radius: 8px; font-weight: bold; display: none; text-align: center; }
+        .maratang-box { background: rgba(255,255,255,0.7); border: 1px dashed #d35400; padding: 12px; border-radius: 8px; margin-top: 12px; font-size: 0.95em; color: #c0392b; }
         .child-row { background: #fff5f8; }
 
         @media (max-width: 600px) { .grid-4 { grid-template-columns: 1fr 1fr; } .summary-grid { grid-template-columns: 1fr; } .sum-row { grid-column: span 1; } }
@@ -212,6 +212,7 @@
     let lifeChart = null;
     const INFLATION_RATE = 0.025; 
     const SALARY_RATE = 0.020;    
+    const BASE_MARATANG_PRICE = 12000; // 2026년 마라탕 기본 가격
 
     function attachCalcEvents(stageClass, expClass, incId, totExpId, saveId) {
         const inputs = document.querySelectorAll(`.${stageClass}, #${incId}`);
@@ -246,6 +247,11 @@
         return isNegative ? "- " + text : text;
     }
 
+    function formatExactWon(amount) {
+        // 백원 단위에서 내림 처리하여 실제 가격처럼 보이게 함
+        return (Math.floor(amount / 100) * 100).toLocaleString() + "원";
+    }
+
     function calculateLifeCycle() {
         const aY = parseInt(document.getElementById('ageYouth').value);
         const aM = parseInt(document.getElementById('ageMid').value);
@@ -275,7 +281,7 @@
         let lifetimeExpenseAlive = 0;
         let lifetimeInvestedPrincipal = 0; 
         let lifetimeInterestGained = 0;    
-        let shortfallAmount = 0; // 🔥 목표 나이까지 더 필요했던 금액
+        let shortfallAmount = 0; 
 
         for (let age = aY; age <= aD; age++) {
             labels.push(age + '세');
@@ -288,7 +294,6 @@
             let currentInc = (applyInflation && age < aO) ? baseInc * Math.pow(1 + SALARY_RATE, yearsPassed) : baseInc;
             let currentExp = applyInflation ? baseExp * Math.pow(1 + INFLATION_RATE, yearsPassed) : baseExp;
             
-            // 살아있을 때 정상적으로 자산이 굴러가는 로직
             if (!isDead) {
                 lifetimeIncomeAlive += (currentInc * 12);
                 lifetimeExpenseAlive += (currentExp * 12);
@@ -308,14 +313,12 @@
                 wealthData.push(Math.floor(currentWealth));
                 principalData.push(Math.floor(currentPrincipal));
 
-                // 파산 판정
                 if (currentWealth < 0) { 
                     bankruptAge = age; 
                     isDead = true; 
-                    shortfallAmount += Math.abs(currentWealth); // 파산 시점에 발생한 즉각적인 마이너스 빚 추가
+                    shortfallAmount += Math.abs(currentWealth); 
                 }
             } else {
-                // 🔥 사망(파산) 후: 차트는 끊어버리고, 매년 필요했던 숨만 쉬어도 나가는 적자 금액을 계산
                 wealthData.push(null); 
                 principalData.push(null); 
                 
@@ -340,8 +343,22 @@
 
         const inflationAlert = document.getElementById('inflationAlert');
         if (applyInflation) {
+            // 🔥 마라탕 지수 계산
+            const yearsToRetire = aO - aY;
+            const yearsToDeath = aD - aY;
+            const retireMaratangPrice = BASE_MARATANG_PRICE * Math.pow(1 + INFLATION_RATE, yearsToRetire);
+            const deathMaratangPrice = BASE_MARATANG_PRICE * Math.pow(1 + INFLATION_RATE, yearsToDeath);
+
             inflationAlert.style.display = 'block';
-            inflationAlert.innerHTML = `🚨 현실 패치 가동 중! (물가 상승 2.5%, 연봉 인상 2.0%)`;
+            inflationAlert.innerHTML = `
+                🚨 현실 패치 가동 중! (물가 상승 2.5%, 연봉 인상 2.0%)
+                <div class="maratang-box">
+                    🍜 <strong>마라탕 지수 (Maratang Index)</strong><br>
+                    2026년 현재 <strong>${BASE_MARATANG_PRICE.toLocaleString()}원</strong>인 마라탕 한 그릇, 매년 2.5%씩 오르면?<br>
+                    내가 은퇴할 때(${aO}세): <strong>${formatExactWon(retireMaratangPrice)}</strong><br>
+                    내가 ${aD}살이 되었을 때: 무려 <strong>${formatExactWon(deathMaratangPrice)}</strong>!
+                </div>
+            `;
         } else {
             inflationAlert.style.display = 'none';
         }
