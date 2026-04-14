@@ -20,8 +20,7 @@
   .start-screen{position:fixed;inset:0;z-index:2000;background:var(--bg);
     background-image:radial-gradient(ellipse at 30% 20%,rgba(0,212,255,.07) 0%,transparent 60%),
     radial-gradient(ellipse at 70% 80%,rgba(0,230,118,.05) 0%,transparent 60%);
-    display:flex;align-items:center;justify-content:center;padding:20px;
-    animation:fadeIn .4s ease;}
+    display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn .4s ease;}
   .start-screen.hidden{display:none;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   .start-layout{display:grid;grid-template-columns:400px 1fr;gap:20px;max-width:940px;width:100%;align-items:start;}
@@ -49,21 +48,16 @@
 
   .lb-card{background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:26px;position:relative;overflow:hidden;}
   .lb-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--yellow),#ff8c00);}
-  .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+  .lb-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
   .lb-title{font-size:16px;font-weight:900;color:var(--white);}
   .lb-sub{font-size:11px;color:var(--muted);margin-top:2px;}
-  .lb-head-btns{display:flex;gap:6px;align-items:center;}
   .lb-refresh{background:var(--bg3);border:1px solid var(--border);color:var(--muted);
     padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
   .lb-refresh:hover{color:var(--cyan);border-color:var(--cyan);}
-  .lb-admin-btn{background:var(--bg3);border:1px solid var(--border);color:var(--muted);
-    padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;}
-  .lb-admin-btn:hover{color:var(--yellow);border-color:var(--yellow);}
-  .lb-admin-btn.active{background:rgba(255,214,0,.1);border-color:var(--yellow);color:var(--yellow);}
-  .lb-delete-all{background:rgba(255,68,68,.15);border:1px solid var(--red);color:var(--red);
-    padding:6px 14px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;font-weight:700;margin-bottom:10px;display:none;}
-  .lb-delete-all:hover{background:rgba(255,68,68,.3);}
-  .lb-delete-all.show{display:block;}
+  .lb-admin{background:var(--bg3);border:1px solid var(--border);color:var(--muted);
+    padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;transition:all .15s;font-family:'Noto Sans KR',sans-serif;margin-left:6px;}
+  .lb-admin:hover{color:var(--yellow);border-color:var(--yellow);}
+  .lb-admin.active{color:var(--yellow);border-color:var(--yellow);background:rgba(255,214,0,.1);}
   .lb-list{display:flex;flex-direction:column;gap:7px;max-height:420px;overflow-y:auto;}
   .lb-list::-webkit-scrollbar{width:3px;}
   .lb-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
@@ -71,8 +65,7 @@
   .lb-empty-icon{font-size:30px;margin-bottom:8px;}
   .lb-loading{text-align:center;color:var(--muted);font-size:13px;padding:36px 20px;}
   .lb-row{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:9px;
-    background:var(--bg3);border:1px solid transparent;transition:border-color .2s;
-    animation:slideIn .3s ease both;}
+    background:var(--bg3);border:1px solid transparent;transition:border-color .2s;animation:slideIn .3s ease both;}
   .lb-row:hover{border-color:var(--border);}
   .lb-row.top1{background:rgba(255,214,0,.07);border-color:rgba(255,214,0,.22);}
   .lb-row.top2{background:rgba(192,192,192,.06);border-color:rgba(192,192,192,.18);}
@@ -87,30 +80,20 @@
   .lb-ret{font-size:15px;font-weight:900;font-family:'JetBrains Mono',monospace;text-align:right;flex-shrink:0;}
   .lb-ret.pos{color:var(--green)}.lb-ret.neg{color:var(--red);}
   .lb-asset{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;text-align:right;margin-top:2px;}
-  .lb-del-btn{background:rgba(255,68,68,.2);border:1px solid var(--red);color:var(--red);
-    padding:3px 8px;border-radius:5px;font-size:10px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;
-    font-weight:700;white-space:nowrap;transition:all .15s;display:none;}
-  .lb-del-btn:hover{background:rgba(255,68,68,.4);}
-  .lb-del-btn.show{display:block;}
+  .lb-del-btn{background:rgba(255,68,68,.15);border:1px solid var(--red);color:var(--red);padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer;flex-shrink:0;font-family:'Noto Sans KR',sans-serif;}
+  .lb-del-btn:hover{background:rgba(255,68,68,.3);}
+  .lb-del-all{background:rgba(255,68,68,.15);border:1px solid var(--red);color:var(--red);padding:5px 11px;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Noto Sans KR',sans-serif;margin-bottom:10px;}
+  .lb-del-all:hover{background:rgba(255,68,68,.3);}
 
-  /* ─── ADMIN MODAL ─── */
-  .admin-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:5000;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-  .admin-modal-overlay.show{display:flex;}
-  .admin-modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:30px;width:340px;text-align:center;}
-  .admin-modal-title{font-size:18px;font-weight:900;color:var(--white);margin-bottom:6px;}
-  .admin-modal-desc{font-size:12px;color:var(--muted);margin-bottom:18px;}
-  .admin-pw-input{width:100%;background:var(--bg3);border:2px solid var(--border);color:var(--white);padding:12px 14px;
-    border-radius:8px;font-size:20px;font-weight:700;font-family:'JetBrains Mono',monospace;
-    outline:none;text-align:center;letter-spacing:8px;transition:border-color .2s;margin-bottom:14px;}
-  .admin-pw-input:focus{border-color:var(--yellow);}
-  .admin-pw-input.error{border-color:var(--red);animation:shake .3s ease;}
-  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-  .admin-modal-btns{display:flex;gap:8px;}
-  .admin-modal-btns button{flex:1;padding:11px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;transition:all .15s;}
-  .admin-btn-cancel{background:var(--bg3);color:var(--muted);}
-  .admin-btn-cancel:hover{background:var(--border);color:var(--white);}
-  .admin-btn-confirm{background:linear-gradient(135deg,var(--yellow),#ff8c00);color:#1a1200;}
-  .admin-btn-confirm:hover{opacity:.9;}
+  .admin-modal{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
+  .admin-modal.show{display:flex;}
+  .admin-box{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:30px;width:320px;text-align:center;}
+  .admin-box h3{color:var(--white);margin-bottom:15px;font-size:16px;}
+  .admin-box input{width:100%;background:var(--bg3);border:2px solid var(--border);color:var(--white);padding:12px;border-radius:8px;font-size:18px;text-align:center;font-family:'JetBrains Mono',monospace;outline:none;margin-bottom:12px;letter-spacing:8px;}
+  .admin-box input:focus{border-color:var(--yellow);}
+  .admin-box .admin-btns{display:flex;gap:8px;}
+  .admin-box .admin-btns button{flex:1;padding:10px;border-radius:8px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Noto Sans KR',sans-serif;}
+  .admin-box .btn-confirm{background:var(--yellow);color:#1a1400;}.admin-box .btn-cancel{background:var(--bg3);color:var(--muted);border:1px solid var(--border);}
 
   .header{background:rgba(13,18,37,.95);border-bottom:1px solid var(--border);padding:12px 24px;
     display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(10px);position:sticky;top:0;z-index:100;}
@@ -142,9 +125,22 @@
   .panel-title{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:14px;font-weight:700;display:flex;align-items:center;gap:8px;}
   .panel-title::before{content:'';width:3px;height:12px;background:var(--cyan);border-radius:2px;display:block;}
   .chart-wrap{position:relative;height:240px;}
-  .news-item{padding:10px 12px;border-radius:8px;background:var(--bg3);border-left:3px solid var(--cyan);margin-bottom:8px;font-size:13px;line-height:1.5;}
-  .news-item.bull{border-left-color:var(--green)}.news-item.bear{border-left-color:var(--red);}
-  .news-item .news-date{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
+
+  /* ─── PREVIEW NEWS (핵심!) ─── */
+  .preview-panel{background:var(--panel);border:2px solid var(--yellow);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;
+    box-shadow:0 0 30px rgba(255,214,0,.08);}
+  .preview-panel::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--yellow),#ff8c00);}
+  .preview-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+  .preview-badge{background:rgba(255,214,0,.15);border:1px solid rgba(255,214,0,.4);color:var(--yellow);padding:3px 10px;border-radius:20px;font-size:11px;font-weight:900;animation:pulse 2s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+  .preview-title{font-size:13px;font-weight:900;color:var(--yellow);text-transform:uppercase;letter-spacing:1.5px;}
+  .preview-content{font-size:15px;font-weight:700;color:var(--white);line-height:1.7;padding:14px 16px;background:rgba(255,214,0,.05);border-radius:8px;border-left:4px solid var(--yellow);}
+  .preview-hint{font-size:11px;color:var(--muted);margin-top:10px;text-align:center;font-style:italic;}
+
+  .result-news{padding:10px 12px;border-radius:8px;background:var(--bg3);border-left:3px solid var(--cyan);margin-bottom:8px;font-size:13px;line-height:1.5;}
+  .result-news.bull{border-left-color:var(--green)}.result-news.bear{border-left-color:var(--red);}
+  .result-news .news-date{font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:3px;}
+
   .trade-tabs{display:grid;grid-template-columns:1fr 1fr;margin-bottom:16px;border-radius:8px;overflow:hidden;border:1px solid var(--border);}
   .trade-tab{padding:10px;text-align:center;font-weight:700;font-size:14px;cursor:pointer;transition:all .2s;background:var(--bg3);color:var(--muted);border:none;font-family:'Noto Sans KR',sans-serif;}
   .trade-tab.active-buy{background:rgba(0,230,118,.2);color:var(--green);}
@@ -230,10 +226,9 @@
   .toast.error{background:rgba(255,68,68,.15);border-color:var(--red);color:var(--red);}
   .toast.info{background:rgba(0,212,255,.15);border-color:var(--cyan);color:var(--cyan);}
 
-  /* connection status */
-  .conn-status{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;}
-  .conn-status.online{color:var(--green);background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);}
-  .conn-status.offline{color:var(--red);background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);}
+  .fb-status{font-size:10px;padding:2px 8px;border-radius:10px;font-family:'JetBrains Mono',monospace;}
+  .fb-status.online{color:var(--green);background:rgba(0,230,118,.1);border:1px solid rgba(0,230,118,.3);}
+  .fb-status.offline{color:var(--red);background:rgba(255,68,68,.1);border:1px solid rgba(255,68,68,.3);}
 
   @media(max-width:768px){
     .start-layout,.result-inner{grid-template-columns:1fr;}
@@ -247,17 +242,14 @@
 </head>
 <body>
 
-<!-- ══ ADMIN PASSWORD MODAL ══ -->
-<div class="admin-modal-overlay" id="adminModal">
-  <div class="admin-modal">
-    <div style="font-size:32px;margin-bottom:8px;">🔐</div>
-    <div class="admin-modal-title">관리자 인증</div>
-    <div class="admin-modal-desc">명예의 전당을 관리하려면<br>관리자 비밀번호를 입력하세요.</div>
-    <input class="admin-pw-input" id="adminPwInput" type="password" maxlength="10" placeholder="····"
-      onkeydown="if(event.key==='Enter')confirmAdmin()">
-    <div class="admin-modal-btns">
-      <button class="admin-btn-cancel" onclick="closeAdminModal()">취소</button>
-      <button class="admin-btn-confirm" onclick="confirmAdmin()">🔓 인증</button>
+<!-- ══ ADMIN MODAL ══ -->
+<div class="admin-modal" id="adminModal">
+  <div class="admin-box">
+    <h3>🔒 관리자 인증</h3>
+    <input type="password" id="adminPwInput" placeholder="••••" maxlength="4" onkeydown="if(event.key==='Enter')verifyAdmin()">
+    <div class="admin-btns">
+      <button class="btn-cancel" onclick="closeAdminModal()">취소</button>
+      <button class="btn-confirm" onclick="verifyAdmin()">🔓 인증</button>
     </div>
   </div>
 </div>
@@ -268,11 +260,13 @@
     <div class="start-card">
       <div class="start-logo">📈</div>
       <div class="start-title">삼성전자<br><span>모의주식</span> 트레이딩</div>
-      <div class="start-desc">실제 삼성전자 주가 데이터(2020~2024)로 가상 투자를 체험해보세요.<br>초기 자금 <b style="color:var(--cyan)">100만원</b>으로 얼마나 불릴 수 있을까요?</div>
+      <div class="start-desc">실제 삼성전자 주가 흐름 기반 가상 투자를 체험해보세요.<br>
+        <b style="color:var(--yellow)">📰 뉴스를 먼저 읽고, 미래 주가를 예측해서 투자하세요!</b><br>
+        초기 자금 <b style="color:var(--cyan)">100만원</b>으로 얼마나 불릴 수 있을까요?</div>
       <div class="start-chips">
-        <div class="chip">📅 <b>2020.01~2024.12</b></div>
+        <div class="chip">📅 <b>24개월 시뮬레이션</b></div>
         <div class="chip">💰 <b>초기자금 100만원</b></div>
-        <div class="chip">📊 <b>실제 주가 데이터</b></div>
+        <div class="chip">📰 <b>뉴스 기반 예측 투자</b></div>
       </div>
       <div class="name-label">내 이름을 입력하세요</div>
       <input class="name-input" id="nameInput" type="text" placeholder="예: 홍길동" maxlength="10"
@@ -281,13 +275,9 @@
     </div>
     <div class="lb-card">
       <div class="lb-head">
-        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">모든 학생의 기록 <span class="conn-status" id="connStatus">확인중</span></div></div>
-        <div class="lb-head-btns">
-          <button class="lb-admin-btn" id="adminBtnStart" onclick="openAdminModal('start')">🔒 관리</button>
-          <button class="lb-refresh" onclick="loadLb('startLbList')">🔄 새로고침</button>
-        </div>
+        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">모든 참가자의 기록 <span class="fb-status" id="fbStatus1">확인중...</span></div></div>
+        <div style="display:flex"><button class="lb-refresh" onclick="loadLb('startLbList')">🔄</button><button class="lb-admin" id="adminBtn1" onclick="openAdminModal('startLbList')">🔒 관리</button></div>
       </div>
-      <button class="lb-delete-all" id="deleteAllBtnStart" onclick="deleteAllLb('startLbList')">🗑️ 전체 기록 삭제</button>
       <div class="lb-list" id="startLbList"><div class="lb-loading">⏳ 기록 불러오는 중...</div></div>
     </div>
   </div>
@@ -331,16 +321,22 @@
   </div>
   <div class="grid">
     <div class="grid-left">
+      <!-- ★ 예고 뉴스 (핵심 UI) ★ -->
+      <div class="preview-panel" id="previewPanel">
+        <div class="preview-header">
+          <span class="preview-badge">🔴 LIVE</span>
+          <span class="preview-title">📰 속보 — 다음 달 투자 판단 뉴스</span>
+        </div>
+        <div class="preview-content" id="previewContent">시뮬레이션을 시작합니다! 아래 뉴스를 읽고 매수/매도를 결정한 후 "다음 달로 이동"을 누르세요.</div>
+        <div class="preview-hint">💡 이 뉴스를 참고하여 매수/매도를 결정하세요. 단, 뉴스가 항상 주가 방향을 맞추진 않습니다!</div>
+      </div>
       <div class="panel">
         <div class="panel-title">주가 차트 (월봉)</div>
         <div class="chart-wrap"><canvas id="priceChart"></canvas></div>
       </div>
       <div class="panel">
-        <div class="panel-title">📰 시장 뉴스</div>
-        <div id="newsFeed">
-          <div class="news-item"><div class="news-date">시작</div>
-          시뮬레이션을 시작합니다. <strong>2020년 1월</strong>부터 삼성전자 주식 투자를 시작해보세요! 초기 자금은 <strong>100만원</strong>입니다 💡</div>
-        </div>
+        <div class="panel-title">📋 지난 뉴스 결과</div>
+        <div id="newsFeed"><div class="result-news"><div class="news-date">시작</div>2024년 1월, 초기 자금 100만원으로 투자를 시작합니다! 📰 위의 속보 뉴스를 읽고 투자를 결정하세요 💡</div></div>
       </div>
       <div class="panel">
         <div class="panel-title">📋 거래 내역</div>
@@ -418,13 +414,9 @@
     </div>
     <div class="result-lb-card">
       <div class="lb-head" style="margin-bottom:16px;">
-        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">전체 학생 순위</div></div>
-        <div class="lb-head-btns">
-          <button class="lb-admin-btn" id="adminBtnResult" onclick="openAdminModal('result')">🔒 관리</button>
-          <button class="lb-refresh" onclick="loadLb('resultLbList')">🔄 새로고침</button>
-        </div>
+        <div><div class="lb-title">🏆 명예의 전당</div><div class="lb-sub">전체 순위</div></div>
+        <div style="display:flex"><button class="lb-refresh" onclick="loadLb('resultLbList')">🔄</button><button class="lb-admin" id="adminBtn2" onclick="openAdminModal('resultLbList')">🔒 관리</button></div>
       </div>
-      <button class="lb-delete-all" id="deleteAllBtnResult" onclick="deleteAllLb('resultLbList')">🗑️ 전체 기록 삭제</button>
       <div class="lb-list" id="resultLbList"><div class="lb-loading">⏳ 불러오는 중...</div></div>
     </div>
   </div>
@@ -433,301 +425,254 @@
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-/* ╔══════════════════════════════════════════════════════╗
-   ║  🔥 Firebase 설정 - 아래 URL만 바꾸면 됩니다!       ║
-   ╚══════════════════════════════════════════════════════╝ */
-const FIREBASE_URL = 'https://money-8639b-default-rtdb.asia-southeast1.firebasedatabase.app/';  // ← 여기에 본인의 Firebase URL 입력! (예: https://my-project-default-rtdb.firebaseio.com)
+// ══════════════════════════════════════════
+// ★ FIREBASE 설정 — 본인의 Firebase URL을 입력하세요!
+// ══════════════════════════════════════════
+const FIREBASE_URL = 'https://money-8639b-default-rtdb.asia-southeast1.firebasedatabase.app/';  // ← 여기에 Firebase Realtime Database URL!
+const FIREBASE_PATH = '/leaderboard';
+const ADMIN_PW = '1111';
 
-const ADMIN_PASSWORD = '1111';
-let adminMode = false;
-let adminTarget = 'start'; // 'start' or 'result'
-
-// ─── Firebase 연결 확인 ───
-async function checkConnection() {
-  const el = document.getElementById('connStatus');
-  if (!FIREBASE_URL) {
-    el.textContent = '⚠️ Firebase 미설정 (로컬 모드)';
-    el.className = 'conn-status offline';
-    return false;
-  }
-  try {
-    const res = await fetch(FIREBASE_URL + '/.json?shallow=true', { method: 'GET' });
-    if (res.ok) { el.textContent = '🟢 온라인'; el.className = 'conn-status online'; return true; }
-    else { el.textContent = '🔴 연결 실패'; el.className = 'conn-status offline'; return false; }
-  } catch(e) { el.textContent = '🔴 연결 실패'; el.className = 'conn-status offline'; return false; }
-}
-
-function useFirebase() { return FIREBASE_URL && FIREBASE_URL.length > 10; }
-
-// ─── 이름 → Firebase 키 변환 (특수문자 처리) ───
-function nameToKey(name) {
-  return btoa(unescape(encodeURIComponent(name))).replace(/[.\/$/\[\]#+=]/g, '_');
-}
-
-// ─── 저장 (Firebase 또는 localStorage) ───
-async function saveToLb(rec) {
-  // localStorage에도 항상 저장 (백업)
-  try {
-    const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
-    if (!local[rec.name] || local[rec.name].returnPct < rec.returnPct) {
-      local[rec.name] = rec;
-      localStorage.setItem('samsung_lb', JSON.stringify(local));
-    }
-  } catch(e) {}
-
-  // Firebase 저장
-  if (useFirebase()) {
-    try {
-      const key = nameToKey(rec.name);
-      const res = await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json');
-      const existing = await res.json();
-      if (existing && existing.returnPct >= rec.returnPct) return; // 더 높은 기록만 갱신
-      await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(rec)
-      });
-    } catch(e) { console.warn('Firebase save failed:', e); }
-  }
-}
-
-// ─── 불러오기 ───
-async function loadLb(targetId) {
-  const el = document.getElementById(targetId);
-  if (!el) return;
-  el.innerHTML = '<div class="lb-loading">⏳ 불러오는 중...</div>';
-
-  let entries = [];
-
-  if (useFirebase()) {
-    try {
-      const res = await fetch(FIREBASE_URL + '/leaderboard.json');
-      const data = await res.json();
-      if (data) entries = Object.values(data);
-    } catch(e) {
-      console.warn('Firebase load failed, using localStorage:', e);
-      try {
-        const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
-        entries = Object.values(local);
-      } catch(e2) {}
-    }
-  } else {
-    try {
-      const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
-      entries = Object.values(local);
-    } catch(e) {}
-  }
-
-  if (!entries.length) {
-    el.innerHTML = '<div class="lb-empty"><div class="lb-empty-icon">🌱</div>아직 기록이 없어요.<br>첫 번째 투자자가 되어보세요!</div>';
-    return;
-  }
-
-  entries.sort((a, b) => b.returnPct - a.returnPct);
-  renderLbEntries(el, entries);
-}
-
-// ─── 개별 삭제 ───
-async function deleteLbEntry(name, targetId) {
-  if (!confirm('"' + name + '" 님의 기록을 삭제할까요?')) return;
-
-  // localStorage 삭제
-  try {
-    const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
-    delete local[name];
-    localStorage.setItem('samsung_lb', JSON.stringify(local));
-  } catch(e) {}
-
-  // Firebase 삭제
-  if (useFirebase()) {
-    try {
-      const key = nameToKey(name);
-      await fetch(FIREBASE_URL + '/leaderboard/' + key + '.json', { method: 'DELETE' });
-    } catch(e) { console.warn('Firebase delete failed:', e); }
-  }
-
-  showToast('🗑️ "' + name + '" 기록 삭제됨', 'info');
-  await loadLb(targetId);
-}
-
-// ─── 전체 삭제 ───
-async function deleteAllLb(targetId) {
-  if (!confirm('⚠️ 정말로 모든 기록을 삭제할까요?\n이 작업은 되돌릴 수 없습니다!')) return;
-
-  // localStorage 삭제
-  localStorage.removeItem('samsung_lb');
-
-  // Firebase 삭제
-  if (useFirebase()) {
-    try {
-      await fetch(FIREBASE_URL + '/leaderboard.json', { method: 'DELETE' });
-    } catch(e) { console.warn('Firebase deleteAll failed:', e); }
-  }
-
-  showToast('🗑️ 전체 기록이 삭제되었습니다', 'info');
-  await loadLb(targetId);
-}
-
-// ─── 리더보드 렌더링 ───
-function renderLbEntries(el, entries) {
-  const medal = ['🥇','🥈','🥉'];
-  const mClass = ['r1','r2','r3'];
-  const rowClass = ['top1','top2','top3'];
-  el.innerHTML = entries.slice(0, 20).map((e, i) => {
-    const isMe = e.name === state.playerName;
-    const retStr = (e.returnPct >= 0 ? '+' : '') + e.returnPct.toFixed(2) + '%';
-    const rankHtml = i < 3 ? '<span class="lb-rank ' + mClass[i] + '">' + medal[i] + '</span>' : '<span class="lb-rank rn">' + (i+1) + '</span>';
-    const meLabel = isMe ? ' <span style="color:var(--cyan);font-size:10px">(나)</span>' : '';
-    const delBtn = '<button class="lb-del-btn ' + (adminMode ? 'show' : '') + '" onclick="deleteLbEntry(\''+e.name.replace(/'/g,"\\'")+'\',\''+getCurrentLbTarget()+'\')">삭제</button>';
-    return '<div class="lb-row ' + (i < 3 ? rowClass[i] : '') + ' ' + (isMe ? 'me' : '') + '" style="animation-delay:' + (i*.04) + 's">'
-      + rankHtml
-      + '<div class="lb-info"><div class="lb-name">' + e.name + meLabel + '</div><div class="lb-meta">' + e.date + ' · ' + e.tradeCount + '회 거래</div></div>'
-      + '<div style="display:flex;align-items:center;gap:8px;"><div><div class="lb-ret ' + (e.returnPct >= 0 ? 'pos' : 'neg') + '">' + retStr + '</div><div class="lb-asset">₩' + e.finalAsset.toLocaleString() + '</div></div>' + delBtn + '</div>'
-      + '</div>';
-  }).join('');
-}
-
-function getCurrentLbTarget() {
-  const resultVisible = document.getElementById('resultScreen').classList.contains('show');
-  return resultVisible ? 'resultLbList' : 'startLbList';
-}
-
-// ─── 관리자 모달 ───
-function openAdminModal(target) {
-  adminTarget = target;
-  if (adminMode) {
-    // 이미 관리자 모드면 해제
-    adminMode = false;
-    updateAdminUI();
-    const tid = target === 'start' ? 'startLbList' : 'resultLbList';
-    loadLb(tid);
-    showToast('🔒 관리자 모드 해제', 'info');
-    return;
-  }
-  document.getElementById('adminModal').classList.add('show');
-  document.getElementById('adminPwInput').value = '';
-  document.getElementById('adminPwInput').className = 'admin-pw-input';
-  setTimeout(() => document.getElementById('adminPwInput').focus(), 100);
-}
-function closeAdminModal() {
-  document.getElementById('adminModal').classList.remove('show');
-}
-function confirmAdmin() {
-  const pw = document.getElementById('adminPwInput').value;
-  if (pw === ADMIN_PASSWORD) {
-    adminMode = true;
-    closeAdminModal();
-    updateAdminUI();
-    const tid = adminTarget === 'start' ? 'startLbList' : 'resultLbList';
-    loadLb(tid);
-    showToast('🔓 관리자 모드 활성화!', 'success');
-  } else {
-    document.getElementById('adminPwInput').className = 'admin-pw-input error';
-    showToast('❌ 비밀번호가 틀렸습니다', 'error');
-    setTimeout(() => { document.getElementById('adminPwInput').className = 'admin-pw-input'; }, 400);
-  }
-}
-function updateAdminUI() {
-  const btns = [document.getElementById('adminBtnStart'), document.getElementById('adminBtnResult')];
-  btns.forEach(b => {
-    if (b) {
-      b.textContent = adminMode ? '🔓 관리중' : '🔒 관리';
-      b.className = 'lb-admin-btn' + (adminMode ? ' active' : '');
-    }
-  });
-  const dels = [document.getElementById('deleteAllBtnStart'), document.getElementById('deleteAllBtnResult')];
-  dels.forEach(d => { if (d) d.className = 'lb-delete-all' + (adminMode ? ' show' : ''); });
-  // 삭제 버튼 표시/숨김
-  document.querySelectorAll('.lb-del-btn').forEach(b => b.className = 'lb-del-btn' + (adminMode ? ' show' : ''));
-}
-
-// ══════════════════════════════════════════════
-// 이하 기존 게임 로직 (변경 없음)
-// ══════════════════════════════════════════════
-
+// ══════════════════════════════════════════
+// ★ 주가 데이터 — 뉴스 먼저, 가격은 다음 달에 공개!
+// preview: 이번 달에 보여줄 속보 뉴스 (다음 달 가격에 영향)
+// result: 다음 달 도달 시 보여줄 결과 설명
+// ══════════════════════════════════════════
 const stockData=[
-  {d:'2020-01',p:55800,n:'반도체 업황 개선 기대감으로 외국인 매수세 유입',t:'bull'},
-  {d:'2020-02',p:52600,n:'코로나19 국내 확산 시작, 글로벌 증시 불안감 고조',t:'bear'},
-  {d:'2020-03',p:43550,n:'코로나19 팬데믹 선언! 전 세계 증시 급락, 삼성도 하락',t:'bear'},
-  {d:'2020-04',p:47350,n:'정부 대규모 경기 부양책 발표, 반등 시작',t:'bull'},
-  {d:'2020-05',p:50300,n:'5G 스마트폰 출시 확대, 반도체 수요 증가 전망',t:'bull'},
-  {d:'2020-06',p:52100,n:'메모리 반도체 가격 회복 조짐, 실적 기대감 상승',t:'bull'},
-  {d:'2020-07',p:53500,n:'갤럭시 폴드 판매 호조, 프리미엄 스마트폰 경쟁력 부각',t:'neutral'},
-  {d:'2020-08',p:59500,n:'코로나19 관련 언택트·반도체 수요 급증, 주가 상승 가속',t:'bull'},
-  {d:'2020-09',p:58600,n:'나스닥 급락 여파로 국내 기술주 동반 하락',t:'bear'},
-  {d:'2020-10',p:61500,n:'3분기 역대급 실적 발표! 영업이익 12.3조원 달성',t:'bull'},
-  {d:'2020-11',p:68300,n:'코로나 백신 개발 성공 발표, 경기 회복 기대감으로 급등',t:'bull'},
-  {d:'2020-12',p:81000,n:'외국인·기관 동반 매수, 개인 투자자 폭발적 증가 (동학개미)',t:'bull'},
-  {d:'2021-01',p:88800,n:'삼성전자 9만원 돌파! 사상 최고가 경신, 반도체 슈퍼사이클 기대',t:'bull'},
-  {d:'2021-02',p:83000,n:'차익실현 매물 출회, 고점 대비 조정',t:'bear'},
-  {d:'2021-03',p:80800,n:'미국 금리 상승 우려로 기술주 전반 약세',t:'bear'},
-  {d:'2021-04',p:80200,n:'1분기 영업이익 9.4조원, 시장 예상 하회로 실망 매물',t:'bear'},
-  {d:'2021-05',p:79600,n:'글로벌 반도체 공급 부족 이슈 부각, 투자 매력도 혼재',t:'neutral'},
-  {d:'2021-06',p:79900,n:'파운드리 투자 확대 발표, 장기 성장 기대감',t:'bull'},
-  {d:'2021-07',p:78700,n:'코로나19 4차 유행, 국내 소비심리 위축',t:'bear'},
-  {d:'2021-08',p:76300,n:'반도체 가격 하락 우려, 외국인 매도세 지속',t:'bear'},
-  {d:'2021-09',p:74200,n:'중국 헝다 그룹 파산 위기, 글로벌 금융시장 불안',t:'bear'},
-  {d:'2021-10',p:70500,n:'메모리 반도체 가격 하락 가속, 실적 전망 하향 조정',t:'bear'},
-  {d:'2021-11',p:73000,n:'3분기 영업이익 15.8조원 발표, 예상 상회로 반등',t:'bull'},
-  {d:'2021-12',p:78300,n:'연말 기관 포트폴리오 조정, 소폭 회복',t:'bull'},
-  {d:'2022-01',p:74000,n:'미국 연준 금리 인상 신호 강화, 성장주 전반 급락',t:'bear'},
-  {d:'2022-02',p:73400,n:'러시아-우크라이나 전쟁 발발! 지정학적 리스크 급등',t:'bear'},
-  {d:'2022-03',p:67400,n:'전쟁 장기화 우려, 에너지 가격 폭등으로 인플레이션 심화',t:'bear'},
-  {d:'2022-04',p:64800,n:'연준 빅스텝(0.5%) 금리 인상, 나스닥·코스피 동반 하락',t:'bear'},
-  {d:'2022-05',p:61200,n:'전 세계 물가 급등, 경기침체 우려로 반도체 수요 감소 전망',t:'bear'},
-  {d:'2022-06',p:57300,n:'미국 자이언트스텝(0.75%) 금리 인상, 기술주 급락',t:'bear'},
-  {d:'2022-07',p:61700,n:'반도체 재고 과잉 우려 속 저가 매수세 유입, 단기 반등',t:'bull'},
-  {d:'2022-08',p:62500,n:'2분기 실적 선방, 하반기 수요 회복 기대감',t:'neutral'},
-  {d:'2022-09',p:55400,n:'미 연준 3연속 자이언트스텝, 전 세계 주식시장 충격',t:'bear'},
-  {d:'2022-10',p:57200,n:'환율 1,400원 돌파, 외국인 자금 이탈 지속',t:'bear'},
-  {d:'2022-11',p:60600,n:'미 연준 금리 인상 속도 조절 시사, 반등 시작',t:'bull'},
-  {d:'2022-12',p:59900,n:'경기침체 우려 속 연말 배당 기대감, 보합 수준',t:'neutral'},
-  {d:'2023-01',p:61500,n:'중국 리오프닝(봉쇄 해제)! 반도체 수요 회복 기대감 급등',t:'bull'},
-  {d:'2023-02',p:63400,n:'메모리 반도체 감산 결정, 공급 조절로 가격 반등 기대',t:'bull'},
-  {d:'2023-03',p:65800,n:'챗GPT 열풍! AI 반도체 수요 급증 전망으로 주가 상승',t:'bull'},
-  {d:'2023-04',p:65300,n:'1분기 영업이익 6,000억원 (전년比 96% 급감), 실적 충격',t:'bear'},
-  {d:'2023-05',p:71200,n:'AI 서버용 HBM 메모리 수요 폭증, 삼성전자 수혜 기대',t:'bull'},
-  {d:'2023-06',p:70500,n:'엔비디아 시총 1조달러 돌파, AI 반도체 생태계 확장',t:'bull'},
-  {d:'2023-07',p:72100,n:'메모리 반도체 가격 바닥 확인, 재고 소진 가속',t:'bull'},
-  {d:'2023-08',p:68100,n:'미국 신용등급 강등, 글로벌 증시 조정',t:'bear'},
-  {d:'2023-09',p:67500,n:'고금리 장기화 우려, 반도체 업황 회복 속도 둔화 우려',t:'bear'},
-  {d:'2023-10',p:69300,n:'3분기 영업이익 2.4조원 달성, 실적 턴어라운드 확인',t:'bull'},
-  {d:'2023-11',p:72900,n:'미국 금리 인상 사이클 종료 기대, 기술주 랠리',t:'bull'},
-  {d:'2023-12',p:73800,n:'2024년 반도체 슈퍼사이클 전망, 외국인 매수세 강화',t:'bull'},
-  {d:'2024-01',p:72400,n:'HBM3 공급 확대 기대, 엔비디아 협력 강화 기대감',t:'bull'},
-  {d:'2024-02',p:76500,n:'AI 붐 지속, 반도체 수요 강세 전망 유지',t:'bull'},
-  {d:'2024-03',p:83500,n:'HBM3E 공급 본격화, AI 서버 투자 확대 수혜 기대',t:'bull'},
-  {d:'2024-04',p:82200,n:'중동 분쟁 심화, 지정학적 리스크로 조정',t:'bear'},
-  {d:'2024-05',p:80400,n:'1분기 영업이익 6.6조원 달성, AI 반도체 수요 견고',t:'bull'},
-  {d:'2024-06',p:88800,n:'삼성전자 9만원 재돌파! HBM 시장 확대 기대감 최고조',t:'bull'},
-  {d:'2024-07',p:84400,n:'HBM 품질 이슈 불거짐, 경쟁사 대비 뒤처진다는 우려',t:'bear'},
-  {d:'2024-08',p:75300,n:'엔 캐리 트레이드 청산 충격! 코스피 급락, 삼성 급락',t:'bear'},
-  {d:'2024-09',p:62400,n:'HBM 공급 차질 우려, 3분기 실적 전망 하향',t:'bear'},
-  {d:'2024-10',p:57900,n:'3분기 영업이익 9.18조원, 예상 하회로 실망 매물 폭탄',t:'bear'},
-  {d:'2024-11',p:54200,n:'파운드리 경쟁 열세 우려, 외국인 지속 이탈',t:'bear'},
-  {d:'2024-12',p:53800,n:'연말 배당 기대감 일부 지지, 저가 매수 vs 추가 하락 논쟁',t:'bear'},
+  // ── 0: 시작 (2024-01) ──
+  {d:'2024-01', p:63200,
+   result:'',
+   preview:'🔔 삼성전자, 차세대 HBM4 메모리 양산 계획 공식 발표! 업계 "기술 격차 좁혀질 것" 전망. AI 서버 수요와 맞물려 수혜 기대감 확산 중.'},
+
+  // ── 1: 긍정 뉴스 → 상승 ✓ ──
+  {d:'2024-02', p:74800,
+   result:'📈 HBM4 기대감이 현실화! AI 서버 수요 폭증 + 외국인 매수세 폭발로 +18.4% 급등. 뉴스대로 상승!',
+   preview:'⚡ 미국 빅테크 4사(구글·MS·메타·아마존), AI 인프라에 총 2,000억 달러 투자 발표! 반도체 수요 급증 전망. "역대급 투자 사이클" 평가.'},
+
+  // ── 2: 긍정 뉴스 → 하락 ✗ (차익실현) ──
+  {d:'2024-03', p:68500,
+   result:'📉 호재가 이미 주가에 반영되어 있었음! 차익실현 매물 쏟아져 -8.4% 급락. "소문에 사서 뉴스에 팔아라" 격언 실현.',
+   preview:'⚠️ 중국 SMIC, 5nm 파운드리 양산 전격 돌입! 삼성 파운드리 점유율 직접 위협. 가격 경쟁 심화 불가피 전망.'},
+
+  // ── 3: 부정 뉴스 → 상승 ✗ (악재 선반영) ──
+  {d:'2024-04', p:73200,
+   result:'📈 중국 위협 우려에도 오히려 저가 매수세 폭발! "공포에 사라" 격언대로 +6.9% 반등. AI 수혜 기대가 우려를 압도.',
+   preview:'📊 삼성전자 1분기 실적 발표 임박! 증권가 "깜짝 실적" 전망 우세. HBM 매출 비중 첫 20% 돌파 예상. 하지만 일부 "기대감 과도" 경고도.'},
+
+  // ── 4: 긍정(혼합) → 상승 ✓ ──
+  {d:'2024-05', p:79500,
+   result:'📈 영업이익 6.6조원! 시장 예상 상회. HBM 매출 폭증 확인되며 +8.6% 급등!',
+   preview:'🌊 일본 엔화 급락세 가속! 한국 원화도 동반 약세, 환율 1,400원 돌파 위기. 외국인 자금 이탈 가속 vs 수출 기업 환차익 논쟁.'},
+
+  // ── 5: 부정(혼합) → 하락 ✓ ──
+  {d:'2024-06', p:72100,
+   result:'📉 환율 불안 + 외국인 자금 이탈로 -9.3% 하락. 수출 환차익보다 외국인 매도 압력이 더 강했음.',
+   preview:'🤖 엔비디아 CEO 젠슨 황, 공식 석상에서 "차세대 AI칩에 삼성 HBM 채택 적극 검토 중" 깜짝 발언! 업계 충격.'},
+
+  // ── 6: 긍정 뉴스 → 대폭 상승 ✓ ──
+  {d:'2024-07', p:88300,
+   result:'🚀 엔비디아 협력 기대감 폭발! 외국인 매수 역대급으로 +22.5% 폭등, 9만원 재돌파 눈앞!',
+   preview:'🏆 삼성전자, HBM3E 엔비디아 품질 테스트 최종 통과 공식 확인! 2분기 양산 시작. 동시에 "이미 주가에 다 반영됐다"는 월가 분석 보고서도 등장.'},
+
+  // ── 7: 긍정 뉴스 → 대폭 하락 ✗ (재료 소멸) ──
+  {d:'2024-08', p:76200,
+   result:'📉 호재 확정에 오히려 차익실현 폭탄! -13.7% 급락. "기대가 현실이 되면 팔아라" — 월가 분석이 맞았음.',
+   preview:'💣 이란-이스라엘 군사 충돌 전격 격화! 중동 전면전 우려 고조. 유가 배럴당 120달러 돌파. 글로벌 공급망 마비 공포 확산.'},
+
+  // ── 8: 부정 뉴스 → 하락 ✓ ──
+  {d:'2024-09', p:69800,
+   result:'📉 지정학 리스크 + 유가 폭등으로 글로벌 증시 동반 급락. -8.4% 하락. 뉴스대로 부정적.',
+   preview:'📱 갤럭시 S25 사전예약 역대 최다 기록 경신! "AI폰 시대의 본격 개막" 평가. 그러나 "스마트폰이 주가를 움직이던 시대는 끝났다"는 반론도.'},
+
+  // ── 9: 긍정(혼합) → 상승 ✓ ──
+  {d:'2024-10', p:75400,
+   result:'📈 갤럭시 흥행 + 3분기 실적 기대감이 중동 불안 해소와 맞물려 +8.0% 반등!',
+   preview:'⚠️ 미국 대선 D-7! 트럼프 당선 시 반도체 관세 폭탄 우려 vs 삼성 텍사스 공장 투자 확대 수혜. 해리스 당선 시 현상 유지. 결과 예측 불가능.'},
+
+  // ── 10: 부정(혼합) → 상승 ✗ (반대로!) ──
+  {d:'2024-11', p:82100,
+   result:'📈 트럼프 당선! 관세 우려에도 오히려 "미국 내 투자 확대 수혜" 기대감 폭발. 삼성 텍사스 공장 부각되며 +8.9% 급등!',
+   preview:'🔥 삼성전자, 4분기 실적 쇼크 경고! 주요 증권사 일제히 목표가 20% 하향. "HBM 수율 문제 + 파운드리 적자 심화" 보고서 연속 발표.'},
+
+  // ── 11: 부정 뉴스 → 대폭 하락 ✓ ──
+  {d:'2024-12', p:68900,
+   result:'📉 실적 경고 + 연말 세금 매도 + 외국인 이탈 3중고로 -16.1% 폭락! 뉴스대로 부정적.',
+   preview:'🌏 중국 정부, 역대급 경기부양책 전격 발표! 5조 위안 규모. 반도체 수요 회복 기대 vs "이미 여러 번 실망한 중국 부양책" 회의론 팽팽.'},
+
+  // ── 12: 긍정(혼합) → 소폭 상승 ✓ ──
+  {d:'2025-01', p:72600,
+   result:'📈 중국 부양책 효과 기대 + 신년 매수세로 +5.4% 반등. 하지만 회의론이 상승폭을 제한.',
+   preview:'💀 미국 상무부, "중국향 AI칩 수출 전면 금지" 행정명령 검토 긴급 보도! 삼성 중국 매출 비중 30%. 실현 시 타격 불가피.'},
+
+  // ── 13: 부정 뉴스 → 하락 ✓ ──
+  {d:'2025-02', p:64300,
+   result:'📉 미중 반도체 전쟁 격화 공포! 반도체주 일제히 급락. -11.4% 하락. 뉴스대로 부정적.',
+   preview:'📈 SK하이닉스, HBM4 시장 독점 전망 보고서 발표. "삼성은 기술 2세대 뒤처져" 평가. 하지만 삼성 내부에서 "곧 역전한다" 자신감 표출.'},
+
+  // ── 14: 부정 뉴스 → 하락 ✓ ──
+  {d:'2025-03', p:59200,
+   result:'📉 경쟁사 대비 기술 열세 우려 확대 + 투자심리 악화. -7.9% 하락. 뉴스대로 부정적.',
+   preview:'🔬 삼성전자, 2nm GAA 공정 수율 70% 달성 — 업계 최초! "반도체 제조 역사 새로 쓸 것" 극찬. 단, "양산까지는 2년 필요"라는 냉정한 분석도.'},
+
+  // ── 15: 긍정 뉴스 → 하락 ✗ (기대 vs 현실) ──
+  {d:'2025-04', p:54900,
+   result:'📉 기술 성과에도 "매출로 이어지려면 2년" 평가 우세. 단기 실망감에 -7.3% 하락. 기술 좋다고 주가 오르는 건 아님!',
+   preview:'💰 워런 버핏, 삼성전자 지분 2% 매입 깜짝 공시! "아시아 최고의 가치주" 평가. 전 세계 투자자 이목 집중. 역사적 사건!'},
+
+  // ── 16: 긍정 뉴스 → 대폭 상승 ✓ ──
+  {d:'2025-05', p:67800,
+   result:'🚀 버핏 효과 폭발! 글로벌 자금 대규모 유입 + "저평가" 인식 확산으로 +23.5% 폭등!',
+   preview:'⚡ TSMC 일본 구마모토 공장 대형 화재 발생! 3개월 가동 중단 전망. 글로벌 파운드리 공급 대란 우려. 삼성 반사이익 vs 업계 전체 침체 논쟁.'},
+
+  // ── 17: 부정(혼합) → 상승 ✗ (반사이익) ──
+  {d:'2025-06', p:74500,
+   result:'📈 TSMC 차질로 삼성 파운드리 반사이익 기대감 폭발! 대체 주문 쏟아지며 +9.9% 상승. 남의 불행이 나의 행복(?)',
+   preview:'📊 삼성전자 2분기 실적 "서프라이즈" 전망. HBM 매출 전년 대비 3배 증가 예상! 파운드리도 흑자 전환 기대. 반면 "기대치가 너무 높다" 경고.'},
+
+  // ── 18: 긍정(혼합) → 소폭 상승 ✓ ──
+  {d:'2025-07', p:78200,
+   result:'📈 2분기 영업이익 12조원 달성! AI 메모리 매출 폭증 확인. 기대에 부합하며 +5.0% 상승.',
+   preview:'🌪️ 초대형 태풍 "용용" 한반도 관통 예보! 삼성 평택·화성 반도체 공장 직접 경로. 과거 침수 피해 선례 있어 긴장감 고조.'},
+
+  // ── 19: 부정 뉴스 → 하락 ✓ ──
+  {d:'2025-08', p:71400,
+   result:'📉 태풍 피해로 평택 공장 2주 가동 중단! 3분기 생산량 차질 우려 -8.7% 하락.',
+   preview:'🤝 애플, 차기 아이폰17 프로 AP를 삼성 파운드리에 위탁 생산한다는 초대형 계약설! 복수의 업계 관계자 확인. 실현 시 역대급 수주.'},
+
+  // ── 20: 긍정 뉴스 → 하락 ✗ (루머 붕괴) ──
+  {d:'2025-09', p:66800,
+   result:'📉 애플 계약설, 결국 "찌라시"로 판명! 기대감 급냉. 실망 매도 쏟아지며 -6.4% 하락. 확인되지 않은 루머를 믿으면 안 됨!',
+   preview:'💣 미국 10년물 국채 금리 6% 돌파! 역대 최고 수준. "금리가 주식의 적" — 전 세계 기술주 밸류에이션 재평가 공포. 반면 "이미 바닥" 반론도.'},
+
+  // ── 21: 부정 뉴스 → 하락 ✓ ──
+  {d:'2025-10', p:61200,
+   result:'📉 고금리 장기화 충격! 전 세계 기술주 일제히 급락. -8.4% 하락. 거시경제 앞에서는 개별 호재도 무력.',
+   preview:'📱 삼성 "갤럭시 링2 + AI 글래스" 글로벌 판매 대박! 웨어러블 시장 점유율 1위 등극. 신사업 매출 비중 처음으로 10% 돌파 전망.'},
+
+  // ── 22: 긍정 뉴스 → 상승 ✓ ──
+  {d:'2025-11', p:68500,
+   result:'📈 신사업 성과 + AI 반도체 4분기 수요 강세 전망 맞물려 +11.9% 반등!',
+   preview:'⚠️ 미국 연준 긴급 성명: "2026년 금리 인하 가능성 없다" 폭탄 발언! 시장 "최소 2번 인하" 기대 완전 붕괴. 동시에 삼성 연말 특별배당 2,000원 확정 공시.'},
+
+  // ── 23: 부정(혼합) → 대폭 하락 ✓ ──
+  {d:'2025-12', p:59600,
+   result:'📉 금리 인하 기대 붕괴 충격이 배당 호재를 압도! -13.0% 폭락으로 마감. 거시경제의 힘은 역시 강력..',
+   preview:''}
 ];
 
-const INITIAL_CASH = 1000000;
-let state = {idx:0, cash:INITIAL_CASH, shares:0, avgBuy:0, tradeCount:0, step:1, history:[], chart:null, activeTab:'buy', playerName:''};
+const INITIAL_CASH=1000000;
+const LB_KEY='samsung-sim-v2';
+let state={idx:0,cash:INITIAL_CASH,shares:0,avgBuy:0,tradeCount:0,step:1,history:[],chart:null,activeTab:'buy',playerName:''};
+let adminMode=false, adminTarget='';
 
-function startGame() {
-  const name = document.getElementById('nameInput').value.trim();
-  if (!name) { document.getElementById('nameInput').focus(); showToast('이름을 입력해주세요!','error'); return; }
-  state.playerName = name;
-  document.getElementById('playerBadge').textContent = '👤 ' + name;
-  document.getElementById('startScreen').classList.add('hidden');
+// ═══ FIREBASE ═══
+function fbUrl(path=''){return FIREBASE_URL?FIREBASE_URL+FIREBASE_PATH+(path?'/'+path:'')+'.json':'';}
+let fbOnline=false;
+async function fbCheck(){
+  if(!FIREBASE_URL){fbSetStatus(false);return;}
+  try{const r=await fetch(fbUrl(),{method:'GET'});fbOnline=r.ok;fbSetStatus(r.ok);}catch(e){fbOnline=false;fbSetStatus(false);}
+}
+function fbSetStatus(on){
+  document.querySelectorAll('.fb-status').forEach(el=>{el.textContent=on?'🟢 온라인':'🔴 로컬만';el.className='fb-status '+(on?'online':'offline');});
 }
 
-// ─── TICKER ───
+// ═══ SAVE / LOAD ═══
+function getAllLocal(){try{return JSON.parse(localStorage.getItem(LB_KEY))||{};}catch(e){return {};}}
+function saveLocal(name,rec){const d=getAllLocal();if(!d[name]||rec.returnPct>d[name].returnPct)d[name]=rec;localStorage.setItem(LB_KEY,JSON.stringify(d));}
+function deleteLocal(name){const d=getAllLocal();delete d[name];localStorage.setItem(LB_KEY,JSON.stringify(d));}
+function clearLocal(){localStorage.removeItem(LB_KEY);}
+
+async function saveToLb(rec){
+  saveLocal(rec.name,rec);
+  if(!FIREBASE_URL||!fbOnline)return;
+  try{
+    const key=rec.name.replace(/[.#$/\[\]]/g,'_');
+    const existing=await (await fetch(fbUrl(key))).json();
+    if(!existing||rec.returnPct>existing.returnPct){await fetch(fbUrl(key),{method:'PUT',body:JSON.stringify(rec)});}
+  }catch(e){console.warn('FB save err',e);}
+}
+
+async function loadLb(targetId){
+  const el=document.getElementById(targetId);if(!el)return;
+  el.innerHTML='<div class="lb-loading">⏳ 불러오는 중...</div>';
+  let entries=[];
+  // Firebase
+  if(FIREBASE_URL&&fbOnline){
+    try{const r=await fetch(fbUrl());const d=await r.json();if(d)entries=Object.values(d);}catch(e){}
+  }
+  // Merge local
+  const local=getAllLocal();
+  const localArr=Object.values(local);
+  const nameSet=new Set(entries.map(e=>e.name));
+  localArr.forEach(e=>{if(!nameSet.has(e.name))entries.push(e);else{const idx=entries.findIndex(x=>x.name===e.name);if(idx>=0&&e.returnPct>entries[idx].returnPct)entries[idx]=e;}});
+  if(!entries.length){el.innerHTML='<div class="lb-empty"><div class="lb-empty-icon">🌱</div>아직 기록이 없어요.<br>첫 번째 투자자가 되어보세요!</div>';return;}
+  entries.sort((a,b)=>b.returnPct-a.returnPct);
+  renderLbEntries(el,entries);
+}
+
+function renderLbEntries(el,entries){
+  const medal=['🥇','🥈','🥉'],mClass=['r1','r2','r3'],rowClass=['top1','top2','top3'];
+  let html='';
+  if(adminMode){html+='<button class="lb-del-all" onclick="deleteAll()">🗑️ 전체 기록 삭제</button>';}
+  html+=entries.slice(0,30).map((e,i)=>{
+    const isMe=e.name===state.playerName;
+    const retStr=(e.returnPct>=0?'+':'')+e.returnPct.toFixed(2)+'%';
+    const rankHtml=i<3?`<span class="lb-rank ${mClass[i]}">${medal[i]}</span>`:`<span class="lb-rank rn">${i+1}</span>`;
+    const meLabel=isMe?' <span style="color:var(--cyan);font-size:10px">(나)</span>':'';
+    const delBtn=adminMode?`<button class="lb-del-btn" onclick="deleteOne('${e.name.replace(/'/g,"\\'")}')">삭제</button>`:'';
+    return`<div class="lb-row ${i<3?rowClass[i]:''} ${isMe?'me':''}" style="animation-delay:${i*.04}s">
+      ${rankHtml}
+      <div class="lb-info"><div class="lb-name">${e.name}${meLabel}</div><div class="lb-meta">${e.date||'-'} · ${e.tradeCount||0}회 거래</div></div>
+      <div><div class="lb-ret ${e.returnPct>=0?'pos':'neg'}">${retStr}</div><div class="lb-asset">₩${(e.finalAsset||0).toLocaleString()}</div></div>
+      ${delBtn}
+    </div>`;
+  }).join('');
+  el.innerHTML=html;
+}
+
+// ═══ ADMIN ═══
+function openAdminModal(target){
+  if(adminMode){adminMode=false;document.querySelectorAll('.lb-admin').forEach(b=>{b.className='lb-admin';b.textContent='🔒 관리';});loadLb(target);return;}
+  adminTarget=target;document.getElementById('adminModal').classList.add('show');document.getElementById('adminPwInput').value='';document.getElementById('adminPwInput').focus();
+}
+function closeAdminModal(){document.getElementById('adminModal').classList.remove('show');}
+function verifyAdmin(){
+  if(document.getElementById('adminPwInput').value===ADMIN_PW){
+    adminMode=true;closeAdminModal();document.querySelectorAll('.lb-admin').forEach(b=>{b.className='lb-admin active';b.textContent='🔓 관리중';});
+    loadLb(adminTarget);showToast('🔓 관리자 모드 활성화!','info');
+  }else{showToast('❌ 비밀번호가 틀렸습니다','error');}
+}
+async function deleteOne(name){
+  if(!confirm(`"${name}" 기록을 삭제할까요?`))return;
+  deleteLocal(name);
+  if(FIREBASE_URL&&fbOnline){try{const key=name.replace(/[.#$/\[\]]/g,'_');await fetch(fbUrl(key),{method:'DELETE'});}catch(e){}}
+  showToast(`🗑️ "${name}" 삭제됨`,'info');loadLb(adminTarget);
+}
+async function deleteAll(){
+  if(!confirm('정말 모든 기록을 삭제할까요?'))return;
+  clearLocal();
+  if(FIREBASE_URL&&fbOnline){try{await fetch(fbUrl(),{method:'DELETE'});}catch(e){}}
+  showToast('🗑️ 전체 기록 삭제됨','info');loadLb(adminTarget);
+}
+
+// ═══ START ═══
+function startGame(){
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name){document.getElementById('nameInput').focus();showToast('이름을 입력해주세요!','error');return;}
+  state.playerName=name;document.getElementById('playerBadge').textContent='👤 '+name;
+  document.getElementById('startScreen').classList.add('hidden');
+  // 첫 번째 예고 뉴스 표시
+  showPreview();
+}
+
+// ═══ TICKER ═══
 (()=>{
   const items=['SK하이닉스','LG에너지솔루션','현대차','NAVER','카카오','셀트리온','KB금융','포스코홀딩스','기아','삼성SDI'];
   const vals=[130000,390000,195000,165000,35850,175500,62800,380000,92400,310000];
-  let h='';
-  for(let i=0;i<2;i++) items.forEach((n,j)=>{const r=(Math.random()-.5)*4;h+='<span class="ticker-item">'+n+' <span style="color:'+(r>0?'var(--green)':'var(--red)')+'">'+vals[j].toLocaleString()+'원 '+(r>0?'▲':'▼')+Math.abs(r).toFixed(2)+'%</span></span>';});
+  let h='';for(let i=0;i<2;i++)items.forEach((n,j)=>{const r=(Math.random()-.5)*4;h+=`<span class="ticker-item">${n} <span style="color:${r>0?'var(--green)':'var(--red)'}">${vals[j].toLocaleString()}원 ${r>0?'▲':'▼'}${Math.abs(r).toFixed(2)}%</span></span>`;});
   document.getElementById('tickerInner').innerHTML=h;
 })();
 
+// ═══ CHART ═══
 function initChart(){
   const ctx=document.getElementById('priceChart').getContext('2d');
   const g=ctx.createLinearGradient(0,0,0,240);g.addColorStop(0,'rgba(0,212,255,.25)');g.addColorStop(1,'rgba(0,212,255,0)');
@@ -744,14 +689,42 @@ function updateChart(){
   state.chart.update('none');
 }
 
+// ═══ PREVIEW NEWS (핵심!) ═══
+function showPreview(){
+  const cur=stockData[state.idx];
+  const panel=document.getElementById('previewPanel');
+  const content=document.getElementById('previewContent');
+  if(cur.preview){
+    panel.style.display='block';
+    content.textContent=cur.preview;
+  }else{
+    panel.style.display='block';
+    content.textContent='📊 시뮬레이션 마지막 달입니다. 최종 매도 여부를 결정하세요!';
+  }
+}
+
+function addResultNews(item,idx){
+  if(!item.result)return;
+  const f=document.getElementById('newsFeed');
+  const el=document.createElement('div');
+  const prev=idx>0?stockData[idx-1]:null;
+  const chg=prev?((item.p-prev.p)/prev.p*100):0;
+  const cls=chg>0?'bull':chg<0?'bear':'';
+  el.className='result-news '+cls;
+  el.innerHTML=`<div class="news-date">${item.d} 결과 (${chg>=0?'+':''}${chg.toFixed(1)}%)</div>${item.result}`;
+  f.insertBefore(el,f.firstChild);
+  if(f.children.length>8)f.removeChild(f.lastChild);
+}
+
+// ═══ UI ═══
 function updateUI(){
   const cur=stockData[state.idx],prev=state.idx>0?stockData[state.idx-1]:null,p=cur.p;
   const chg=prev?(p-prev.p)/prev.p*100:0,abs=prev?p-prev.p:0;
   document.getElementById('priceDisplay').textContent='₩'+p.toLocaleString();
   const pcd=document.getElementById('priceChange');
   if(!prev){pcd.textContent='-';pcd.className='price-change neutral';}
-  else if(chg>0){pcd.textContent='▲'+abs.toLocaleString()+' (+'+chg.toFixed(2)+'%)';pcd.className='price-change pos';}
-  else if(chg<0){pcd.textContent='▼'+Math.abs(abs).toLocaleString()+' ('+chg.toFixed(2)+'%)';pcd.className='price-change neg';}
+  else if(chg>0){pcd.textContent=`▲${abs.toLocaleString()} (+${chg.toFixed(2)}%)`;pcd.className='price-change pos';}
+  else if(chg<0){pcd.textContent=`▼${Math.abs(abs).toLocaleString()} (${chg.toFixed(2)}%)`;pcd.className='price-change neg';}
   else{pcd.textContent='0 (0.00%)';pcd.className='price-change neutral';}
   document.getElementById('dateDisplay').textContent=cur.d+' 기준가';
   const sv=state.shares*p,ta=state.cash+sv;
@@ -771,7 +744,7 @@ function updateUI(){
   const pct=Math.round(state.idx/(stockData.length-1)*100);
   document.getElementById('progressFill').style.width=pct+'%';
   document.getElementById('progressPct').textContent=pct+'%';
-  document.getElementById('progressLabel').textContent=cur.d+' ('+(state.idx+1)+'/'+stockData.length+')';
+  document.getElementById('progressLabel').textContent=`${cur.d} (${state.idx+1}/${stockData.length})`;
   updateTradeInfo();
 }
 function updateTradeInfo(){
@@ -780,12 +753,8 @@ function updateTradeInfo(){
   document.getElementById('ti-qty').textContent=q+' 주';
   document.getElementById('ti-total').textContent='₩'+(p*q).toLocaleString();
 }
-function addNews(item){
-  const f=document.getElementById('newsFeed'),el=document.createElement('div');
-  el.className='news-item '+(item.t==='bull'?'bull':item.t==='bear'?'bear':'');
-  el.innerHTML='<div class="news-date">'+item.d+'</div>'+item.n;
-  f.insertBefore(el,f.firstChild);if(f.children.length>6)f.removeChild(f.lastChild);
-}
+
+// ═══ TRADE ═══
 function switchTab(tab){
   state.activeTab=tab;
   const btn=document.getElementById('tradeBtn');
@@ -805,11 +774,11 @@ function executeTrade(){
   if(state.activeTab==='buy'){
     const c=p*q;if(c>state.cash){showToast('현금이 부족합니다!','error');return;}
     state.avgBuy=(state.avgBuy*state.shares+c)/(state.shares+q);state.shares+=q;state.cash-=c;state.tradeCount++;
-    addHistory('buy',q,p,null);showToast('✅ '+q+'주 매수!\n₩'+c.toLocaleString(),'success');
+    addHistory('buy',q,p,null);showToast(`✅ ${q}주 매수!\n₩${c.toLocaleString()}`,'success');
   }else{
     if(q>state.shares){showToast('보유 주식이 부족합니다!','error');return;}
     const r=p*q,pnl=r-state.avgBuy*q;state.shares-=q;state.cash+=r;if(!state.shares)state.avgBuy=0;state.tradeCount++;
-    addHistory('sell',q,p,pnl);showToast('💸 '+q+'주 매도!\n손익: '+(pnl>=0?'+':'')+'₩'+Math.round(pnl).toLocaleString(),pnl>=0?'success':'error');
+    addHistory('sell',q,p,pnl);showToast(`💸 ${q}주 매도!\n손익: ${pnl>=0?'+':''}₩${Math.round(pnl).toLocaleString()}`,pnl>=0?'success':'error');
   }
   updateUI();updateChart();
 }
@@ -818,10 +787,12 @@ function renderHistory(){
   const list=document.getElementById('historyList');
   if(!state.history.length){list.innerHTML='<div class="no-history">아직 거래가 없습니다</div>';return;}
   list.innerHTML=state.history.slice(0,20).map(h=>{
-    const ps=h.pnl!==null?'<span class="hi-pnl" style="color:'+(h.pnl>=0?'var(--green)':'var(--red)')+'">'+(h.pnl>=0?'+':'')+'₩'+Math.round(h.pnl).toLocaleString()+'</span>':'';
-    return '<div class="history-item"><span class="hi-type '+h.type+'">'+(h.type==='buy'?'매수':'매도')+'</span><span class="hi-info">'+h.date+' | '+h.qty+'주 @₩'+h.price.toLocaleString()+'</span>'+ps+'</div>';
+    const ps=h.pnl!==null?`<span class="hi-pnl" style="color:${h.pnl>=0?'var(--green)':'var(--red)'}">${h.pnl>=0?'+':''}₩${Math.round(h.pnl).toLocaleString()}</span>`:'';
+    return`<div class="history-item"><span class="hi-type ${h.type}">${h.type==='buy'?'매수':'매도'}</span><span class="hi-info">${h.date} | ${h.qty}주 @₩${h.price.toLocaleString()}</span>${ps}</div>`;
   }).join('');
 }
+
+// ═══ TIME ═══
 function setStep(s){
   state.step=s;
   document.querySelectorAll('.speed-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.step)===s));
@@ -830,11 +801,21 @@ function setStep(s){
 function advanceTime(){
   const ni=Math.min(state.idx+state.step,stockData.length-1);
   if(ni===state.idx)return;
-  for(let i=state.idx+1;i<=ni;i++)addNews(stockData[i]);
-  state.idx=ni;updateUI();updateChart();
-  if(state.idx>=stockData.length-1){document.getElementById('btnNext').disabled=true;document.getElementById('btnNext').textContent='시뮬레이션 완료!';setTimeout(showResult,1200);}
+  // 결과 뉴스 표시 (이동한 각 월의 결과)
+  for(let i=state.idx+1;i<=ni;i++){addResultNews(stockData[i],i);}
+  state.idx=ni;
+  updateUI();updateChart();
+  // 새로운 예고 뉴스 표시
+  showPreview();
+  if(state.idx>=stockData.length-1){
+    document.getElementById('btnNext').disabled=true;
+    document.getElementById('btnNext').textContent='시뮬레이션 완료!';
+    document.getElementById('previewPanel').style.display='none';
+    setTimeout(showResult,1200);
+  }
 }
 
+// ═══ RESULT ═══
 async function showResult(){
   const fp=stockData[stockData.length-1].p,sv=state.shares*fp,ta=state.cash+sv;
   const ret=(ta-INITIAL_CASH)/INITIAL_CASH*100;
@@ -859,26 +840,18 @@ async function showResult(){
   document.getElementById('resultGrade').textContent=grade;
   document.getElementById('resultScreen').classList.add('show');
   await loadLb('resultLbList');
-  // 순위 배지
-  try {
-    let entries = [];
-    if (useFirebase()) {
-      const res = await fetch(FIREBASE_URL + '/leaderboard.json');
-      const data = await res.json();
-      if (data) entries = Object.values(data);
-    } else {
-      const local = JSON.parse(localStorage.getItem('samsung_lb') || '{}');
-      entries = Object.values(local);
-    }
-    entries.sort((a,b) => b.returnPct - a.returnPct);
-    const rank = entries.findIndex(e => e.name === state.playerName) + 1;
-    if (rank > 0) {
-      const rb = document.getElementById('resultRankBadge'); rb.style.display = 'block';
-      rb.textContent = rank===1?'🥇 전체 1위! 최고의 투자자예요!':rank===2?'🥈 전체 2위!':rank===3?'🥉 전체 3위!':'📊 전체 '+rank+'위 / '+entries.length+'명 중';
-    }
-  } catch(e) {}
+  // Rank badge
+  try{
+    let entries=[];
+    if(FIREBASE_URL&&fbOnline){try{const r=await fetch(fbUrl());const d=await r.json();if(d)entries=Object.values(d);}catch(e){}}
+    const local=Object.values(getAllLocal());
+    const ns=new Set(entries.map(e=>e.name));local.forEach(e=>{if(!ns.has(e.name))entries.push(e);});
+    entries.sort((a,b)=>b.returnPct-a.returnPct);
+    const rank=entries.findIndex(e=>e.name===state.playerName)+1;
+    if(rank>0){const rb=document.getElementById('resultRankBadge');rb.style.display='block';
+      rb.textContent=rank===1?'🥇 전체 1위! 최고의 투자자예요!':rank===2?'🥈 전체 2위!':rank===3?'🥉 전체 3위!':`📊 전체 ${rank}위 / ${entries.length}명 중`;}
+  }catch(e){}
 }
-
 function restartGame(){
   state={idx:0,cash:INITIAL_CASH,shares:0,avgBuy:0,tradeCount:0,step:state.step,history:[],chart:state.chart,activeTab:'buy',playerName:''};
   document.getElementById('resultScreen').classList.remove('show');
@@ -888,25 +861,21 @@ function restartGame(){
   document.getElementById('btnStart').disabled=false;
   document.getElementById('btnNext').disabled=false;
   document.getElementById('btnNext').textContent=state.step===1?'다음 달로 이동 →':'3개월 후로 이동 →';
-  document.getElementById('newsFeed').innerHTML='<div class="news-item"><div class="news-date">시작</div>시뮬레이션을 재시작합니다. <strong>2020년 1월</strong>부터 다시 시작해보세요! 이번엔 더 잘 할 수 있어요 💪</div>';
+  document.getElementById('newsFeed').innerHTML='<div class="result-news"><div class="news-date">시작</div>2024년 1월, 초기 자금 100만원으로 투자를 시작합니다! 📰 위의 속보 뉴스를 읽고 투자를 결정하세요 💡</div>';
+  document.getElementById('previewContent').textContent='시뮬레이션을 시작합니다! 아래 뉴스를 읽고 매수/매도를 결정한 후 "다음 달로 이동"을 누르세요.';
   renderHistory();updateUI();updateChart();switchTab('buy');loadLb('startLbList');
-  // 관리자 모드 해제
-  adminMode = false;
-  updateAdminUI();
 }
 
-function showToast(msg, type='info'){
+// ═══ TOAST ═══
+function showToast(msg,type='info'){
   const t=document.createElement('div');t.className='toast '+type;t.innerHTML=msg.replace(/\n/g,'<br>');
   document.getElementById('toastContainer').appendChild(t);
   setTimeout(()=>t.classList.add('show'),50);
   setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300);},2800);
 }
 
-window.onload = async () => {
-  initChart(); updateUI(); updateChart();
-  await checkConnection();
-  loadLb('startLbList');
-};
+// ═══ INIT ═══
+window.onload=async()=>{initChart();updateUI();updateChart();await fbCheck();loadLb('startLbList');};
 </script>
 </body>
 </html>
