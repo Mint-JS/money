@@ -585,7 +585,7 @@ async function loadLb(targetId){
 
 function renderLb(el,entries){
   const medal=['🥇','🥈','🥉'],mc=['r1','r2','r3'],rc=['top1','top2','top3'];
-  el.innerHTML=entries.slice(0,30).map((e,i)=>{
+  el.innerHTML=entries.slice(0,100).map((e,i)=>{
     const isMe=e.name===state.playerName;
     const ret=(e.returnPct>=0?'+':'')+e.returnPct.toFixed(2)+'%';
     const rk=i<3?`<span class="lb-rank ${mc[i]}">${medal[i]}</span>`:`<span class="lb-rank rn">${i+1}</span>`;
